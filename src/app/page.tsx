@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/features/auth/context";
 import { UserSelect } from "@/features/auth/components/UserSelect";
@@ -41,6 +42,25 @@ const mockHabits = [
 export default function Home() {
   const { user, partner, isLoading, logout } = useAuth();
 
+  // Local state for prayers and habits (mock - will be replaced with Supabase)
+  const [myPrayerStatus, setMyPrayerStatus] = useState({
+    fajr: false,
+    dhuhr: false,
+    asr: false,
+    maghrib: false,
+    isha: false,
+  });
+
+  const [partnerPrayerStatus] = useState({
+    fajr: true,
+    dhuhr: false,
+    asr: false,
+    maghrib: false,
+    isha: false,
+  });
+
+  const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
+
   // Loading state
   if (isLoading) {
     return (
@@ -61,23 +81,6 @@ export default function Home() {
     return <UserSelect />;
   }
 
-  // Mock prayer status for demo
-  const myPrayerStatus = {
-    fajr: true,
-    dhuhr: true,
-    asr: false,
-    maghrib: false,
-    isha: false,
-  };
-
-  const partnerPrayerStatus = {
-    fajr: true,
-    dhuhr: false,
-    asr: false,
-    maghrib: false,
-    isha: false,
-  };
-
   const isAhmad = user.slug === "ahmad";
   const myColor = isAhmad ? "ahmad" : "reem";
   const partnerColor = isAhmad ? "reem" : "ahmad";
@@ -89,13 +92,22 @@ export default function Home() {
   });
 
   const handleTogglePrayer = async (prayer: PrayerName) => {
-    console.log("Toggle prayer:", prayer);
-    // TODO: Implement with Supabase
+    setMyPrayerStatus((prev) => ({
+      ...prev,
+      [prayer]: !prev[prayer],
+    }));
   };
 
-  const handleToggleHabit = async () => {
-    console.log("Toggle habit");
-    // TODO: Implement with Supabase
+  const handleToggleHabit = async (habitId: string) => {
+    setCompletedHabits((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(habitId)) {
+        newSet.delete(habitId);
+      } else {
+        newSet.add(habitId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -218,9 +230,9 @@ export default function Home() {
               <HabitCard
                 key={habit.id}
                 habit={habit}
-                isCompleted={false}
+                isCompleted={completedHabits.has(habit.id)}
                 isPartnerCompleted={habit.id === "morning-photo"}
-                onToggle={handleToggleHabit}
+                onToggle={() => handleToggleHabit(habit.id)}
               />
             ))}
           </div>
