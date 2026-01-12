@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  useRef,
   type ReactNode,
 } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -27,12 +28,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [partner, setPartner] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const supabase = createClient();
+  // Lazy init supabase client only on client side
+  const supabaseRef = useRef<ReturnType<typeof createClient> | null>(null);
+  const getSupabase = useCallback(() => {
+    if (!supabaseRef.current && typeof window !== "undefined") {
+      supabaseRef.current = createClient();
+    }
+    return supabaseRef.current;
+  }, []);
 
   // Load user from localStorage and fetch full data
   const loadUser = useCallback(
     async (slug: string) => {
+      const supabase = getSupabase();
+      if (!supabase) return;
+
       try {
         // Fetch user by slug
         const { data: userData, error: userError } = await supabase
@@ -67,18 +79,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setPartner(null);
       }
     },
-    [supabase]
+    [getSupabase]
   );
 
-  // Initialize: check localStorage for existing user
+  // Mount check
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Initialize: check localStorage for existing user (only after mount)
+  useEffect(() => {
+    if (!isMounted) return;
+
     const storedSlug = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
     if (storedSlug) {
       loadUser(storedSlug).finally(() => setIsLoading(false));
     } else {
       setIsLoading(false);
     }
-  }, [loadUser]);
+  }, [isMounted, loadUser]);
 
   // Login: store slug and load user
   const login = useCallback(
