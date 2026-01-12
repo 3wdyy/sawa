@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+/*
+ * Sawa Design System
+ * Vibe: Soft pastel on dark - romantic, playful, calming
+ */
+
+:root {
+  /* Base colors */
+  --background: #0f0f14;
+  --background-secondary: #1a1a24;
+  --background-tertiary: #242432;
+  --foreground: #f5f5f7;
+  --foreground-muted: #a1a1aa;
+
+  /* Pastel accent palette */
+  --lavender: #c4b5fd;
+  --lavender-soft: #ddd6fe;
+  --lavender-glow: rgba(196, 181, 253, 0.15);
+
+  --mint: #86efac;
+  --mint-soft: #bbf7d0;
+  --mint-glow: rgba(134, 239, 172, 0.15);
+
+  --peach: #fca5a5;
+  --peach-soft: #fecaca;
+  --peach-glow: rgba(252, 165, 165, 0.15);
+
+  --rose: #fda4af;
+  --rose-soft: #fecdd3;
+  --rose-glow: rgba(253, 164, 175, 0.15);
+
+  --sky: #7dd3fc;
+  --sky-soft: #bae6fd;
+  --sky-glow: rgba(125, 211, 252, 0.15);
+
+  --gold: #fcd34d;
+  --gold-soft: #fde68a;
+  --gold-glow: rgba(252, 211, 77, 0.15);
+
+  /* Semantic colors */
+  --success: var(--mint);
+  --warning: var(--gold);
+  --error: var(--peach);
+  --info: var(--sky);
+
+  /* Ahmad & Reem colors */
+  --ahmad-color: var(--sky);
+  --ahmad-glow: var(--sky-glow);
+  --reem-color: var(--rose);
+  --reem-glow: var(--rose-glow);
+
+  /* Prayer colors */
+  --prayer-fajr: var(--lavender);
+  --prayer-dhuhr: var(--gold);
+  --prayer-asr: var(--peach);
+  --prayer-maghrib: var(--rose);
+  --prayer-isha: var(--sky);
+
+  /* Border & UI */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  --ring: var(--lavender);
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+
+  --color-lavender: var(--lavender);
+  --color-mint: var(--mint);
+  --color-peach: var(--peach);
+  --color-rose: var(--rose);
+  --color-sky: var(--sky);
+  --color-gold: var(--gold);
+
+  --color-border: var(--border);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Base styles */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  min-height: 100dvh;
+}
+
+/* Selection */
+::selection {
+  background: var(--lavender);
+  color: var(--background);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--background-tertiary);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground-muted);
+}
+
+/* Focus ring */
+*:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Glow effects utility classes */
+.glow-lavender {
+  box-shadow: 0 0 20px var(--lavender-glow), 0 0 40px var(--lavender-glow);
+}
+
+.glow-mint {
+  box-shadow: 0 0 20px var(--mint-glow), 0 0 40px var(--mint-glow);
+}
+
+.glow-rose {
+  box-shadow: 0 0 20px var(--rose-glow), 0 0 40px var(--rose-glow);
+}
+
+.glow-sky {
+  box-shadow: 0 0 20px var(--sky-glow), 0 0 40px var(--sky-glow);
+}
+
+.glow-gold {
+  box-shadow: 0 0 20px var(--gold-glow), 0 0 40px var(--gold-glow);
+}
+
+/* Glassmorphism card */
+.glass {
+  background: rgba(26, 26, 36, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--lavender), var(--rose));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
