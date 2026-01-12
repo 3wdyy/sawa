@@ -8,9 +8,6 @@ import { HabitCard } from "@/features/habits/components/HabitCard";
 import { PrayerCard } from "@/features/prayer/components/PrayerCard";
 import type { PrayerName } from "@/types/database";
 
-// Force dynamic rendering - no static generation
-export const dynamic = "force-dynamic";
-
 // Temporary mock data until Supabase is connected
 const mockHabits = [
   {
