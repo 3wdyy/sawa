@@ -6,11 +6,9 @@ import {
   useEffect,
   useState,
   useCallback,
-  useRef,
   type ReactNode,
 } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { STORAGE_KEYS, USER_SLUGS } from "@/lib/constants";
+import { STORAGE_KEYS, USER_SLUGS, USER_IDS } from "@/lib/constants";
 import type { User } from "@/types/database";
 
 interface AuthContextType {
@@ -24,63 +22,60 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Mock user data for development (no Supabase required)
+const MOCK_USERS: Record<string, User> = {
+  ahmad: {
+    id: USER_IDS.AHMAD,
+    slug: "ahmad",
+    name: "Ahmad",
+    timezone: "Asia/Dubai",
+    city: "Dubai",
+    country: "UAE",
+    partner_id: USER_IDS.REEM,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  reem: {
+    id: USER_IDS.REEM,
+    slug: "reem",
+    name: "Reem",
+    timezone: "Asia/Dubai",
+    city: "Dubai",
+    country: "UAE",
+    partner_id: USER_IDS.AHMAD,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [partner, setPartner] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Lazy init supabase client only on client side
-  const supabaseRef = useRef<ReturnType<typeof createClient> | null>(null);
-  const getSupabase = useCallback(() => {
-    if (!supabaseRef.current && typeof window !== "undefined") {
-      supabaseRef.current = createClient();
+  // Load user from mock data (localStorage-based auth)
+  const loadUser = useCallback((slug: string) => {
+    const userData = MOCK_USERS[slug];
+
+    if (!userData) {
+      console.error("User not found:", slug);
+      localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+      setUser(null);
+      setPartner(null);
+      return;
     }
-    return supabaseRef.current;
+
+    setUser(userData);
+
+    // Load partner if exists
+    if (userData.partner_id) {
+      const partnerData = Object.values(MOCK_USERS).find(
+        (u) => u.id === userData.partner_id
+      );
+      setPartner(partnerData || null);
+    }
   }, []);
-
-  // Load user from localStorage and fetch full data
-  const loadUser = useCallback(
-    async (slug: string) => {
-      const supabase = getSupabase();
-      if (!supabase) return;
-
-      try {
-        // Fetch user by slug
-        const { data: userData, error: userError } = await supabase
-          .from("users")
-          .select("*")
-          .eq("slug", slug)
-          .single();
-
-        if (userError || !userData) {
-          console.error("Error fetching user:", userError);
-          localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-          setUser(null);
-          setPartner(null);
-          return;
-        }
-
-        setUser(userData);
-
-        // Fetch partner if exists
-        if (userData.partner_id) {
-          const { data: partnerData } = await supabase
-            .from("users")
-            .select("*")
-            .eq("id", userData.partner_id)
-            .single();
-
-          setPartner(partnerData || null);
-        }
-      } catch (error) {
-        console.error("Error loading user:", error);
-        setUser(null);
-        setPartner(null);
-      }
-    },
-    [getSupabase]
-  );
 
   // Mount check
   useEffect(() => {
@@ -93,10 +88,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const storedSlug = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
     if (storedSlug) {
-      loadUser(storedSlug).finally(() => setIsLoading(false));
-    } else {
-      setIsLoading(false);
+      loadUser(storedSlug);
     }
+    setIsLoading(false);
   }, [isMounted, loadUser]);
 
   // Login: store slug and load user
@@ -104,7 +98,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     (userSlug: string) => {
       localStorage.setItem(STORAGE_KEYS.CURRENT_USER, userSlug);
       setIsLoading(true);
-      loadUser(userSlug).finally(() => setIsLoading(false));
+      loadUser(userSlug);
+      setIsLoading(false);
     },
     [loadUser]
   );
