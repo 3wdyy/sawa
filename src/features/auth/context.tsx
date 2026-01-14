@@ -3,9 +3,8 @@
 import {
   createContext,
   useContext,
-  useEffect,
-  useState,
   useCallback,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 import { STORAGE_KEYS, USER_SLUGS, USER_IDS } from "@/lib/constants";
@@ -30,8 +29,9 @@ const MOCK_USERS: Record<string, User> = {
     name: "Ahmad",
     timezone: "Asia/Dubai",
     city: "Dubai",
-    country: "UAE",
+    country: "AE",
     partner_id: USER_IDS.REEM,
+    xp: 0,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
@@ -39,79 +39,74 @@ const MOCK_USERS: Record<string, User> = {
     id: USER_IDS.REEM,
     slug: "reem",
     name: "Reem",
-    timezone: "Asia/Dubai",
-    city: "Dubai",
-    country: "UAE",
+    timezone: "Africa/Cairo",
+    city: "Cairo",
+    country: "EG",
     partner_id: USER_IDS.AHMAD,
+    xp: 0,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
 };
 
+// Helper to get user from slug
+function getUserFromSlug(slug: string | null): User | null {
+  if (!slug) return null;
+  return MOCK_USERS[slug] || null;
+}
+
+// Helper to get partner from user
+function getPartnerFromUser(user: User | null): User | null {
+  if (!user || !user.partner_id) return null;
+  return Object.values(MOCK_USERS).find((u) => u.id === user.partner_id) || null;
+}
+
+// Subscribe to localStorage changes
+function subscribeToStorage(callback: () => void) {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+}
+
+// Get current user slug from localStorage
+function getStoredSlug() {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
+}
+
+// Server snapshot (always null during SSR)
+function getServerSnapshot() {
+  return null;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [partner, setPartner] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isMounted, setIsMounted] = useState(false);
-
-  // Load user from mock data (localStorage-based auth)
-  const loadUser = useCallback((slug: string) => {
-    const userData = MOCK_USERS[slug];
-
-    if (!userData) {
-      console.error("User not found:", slug);
-      localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-      setUser(null);
-      setPartner(null);
-      return;
-    }
-
-    setUser(userData);
-
-    // Load partner if exists
-    if (userData.partner_id) {
-      const partnerData = Object.values(MOCK_USERS).find(
-        (u) => u.id === userData.partner_id
-      );
-      setPartner(partnerData || null);
-    }
-  }, []);
-
-  // Mount check
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Initialize: check localStorage for existing user (only after mount)
-  useEffect(() => {
-    if (!isMounted) return;
-
-    const storedSlug = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-    if (storedSlug) {
-      loadUser(storedSlug);
-    }
-    setIsLoading(false);
-  }, [isMounted, loadUser]);
-
-  // Login: store slug and load user
-  const login = useCallback(
-    (userSlug: string) => {
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, userSlug);
-      setIsLoading(true);
-      loadUser(userSlug);
-      setIsLoading(false);
-    },
-    [loadUser]
+  // Use useSyncExternalStore for hydration-safe localStorage access
+  const storedSlug = useSyncExternalStore(
+    subscribeToStorage,
+    getStoredSlug,
+    getServerSnapshot
   );
 
-  // Logout: clear storage and state
-  const logout = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-    setUser(null);
-    setPartner(null);
+  // Derive user and partner from stored slug
+  const user = getUserFromSlug(storedSlug);
+  const partner = getPartnerFromUser(user);
+
+  // Loading is false once we have hydrated (storedSlug could be null but that's valid)
+  const isLoading = false;
+
+  // Login: store slug in localStorage
+  const login = useCallback((userSlug: string) => {
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, userSlug);
+    // Trigger re-render by dispatching storage event
+    window.dispatchEvent(new StorageEvent("storage", { key: STORAGE_KEYS.CURRENT_USER }));
   }, []);
 
-  // Switch to the other user (for testing)
+  // Logout: clear storage
+  const logout = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+    window.dispatchEvent(new StorageEvent("storage", { key: STORAGE_KEYS.CURRENT_USER }));
+  }, []);
+
+  // Switch to the other user
   const switchUser = useCallback(() => {
     const currentSlug = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
     const newSlug =

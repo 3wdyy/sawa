@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchPartnerHabits } from "../api/habits";
 import { useAuth } from "@/features/auth/context";
@@ -18,7 +18,10 @@ export function usePartnerHabits() {
   const supabase = createClient();
 
   const today = partner ? getTodayInTimezone(partner.timezone) : "";
-  const queryKey = ["partnerHabits", partner?.id, today];
+  const queryKey = useMemo(
+    () => ["partnerHabits", partner?.id, today] as const,
+    [partner?.id, today]
+  );
 
   // Fetch partner's habits
   const {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchPrayerTimes, getCurrentPrayer, getNextPrayer, type PrayerTimes } from "../api/aladhan";
 import { getCurrentTimeInTimezone, getTodayInTimezone } from "@/lib/utils/date";
 import { STORAGE_KEYS, PRAYER_NAMES } from "@/lib/constants";

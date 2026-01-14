@@ -3,14 +3,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils/cn";
-import type { Habit, HabitLog } from "@/types/database";
+import type { Habit } from "@/types/database";
 
 interface HabitCardProps {
   habit: Habit;
   isCompleted: boolean;
   isPartnerCompleted?: boolean;
-  log?: HabitLog | null;
-  onToggle: () => Promise<void>;
+  onToggle: () => Promise<void> | void;
   disabled?: boolean;
 }
 
@@ -18,7 +17,6 @@ export function HabitCard({
   habit,
   isCompleted,
   isPartnerCompleted = false,
-  log,
   onToggle,
   disabled = false,
 }: HabitCardProps) {

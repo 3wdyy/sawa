@@ -1,65 +1,105 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/features/auth/context";
 import { UserSelect } from "@/features/auth/components/UserSelect";
 import { Avatar } from "@/components/ui/avatar";
 import { HabitCard } from "@/features/habits/components/HabitCard";
 import { PrayerCard } from "@/features/prayer/components/PrayerCard";
+import { CoupleProgressBar } from "@/features/couple/components/CoupleProgressBar";
+import { DailyQuestionCard } from "@/features/questions/components/DailyQuestionCard";
+import { CheckInCard } from "@/features/checkin/components/CheckInCard";
+import { QuickRitualCard } from "@/features/ritual/components/QuickRitualCard";
+import { useHabits } from "@/features/habits/hooks/useHabits";
+import { usePartnerHabits } from "@/features/habits/hooks/usePartnerHabits";
+import { usePrayerTimes } from "@/features/prayer/hooks/usePrayerTimes";
 import type { PrayerName } from "@/types/database";
 
-// Temporary mock data until Supabase is connected
-const mockHabits = [
-  {
-    id: "morning-photo",
-    name: "Morning Photo",
-    slug: "morning-photo",
-    type: "binary" as const,
-    category: "relationship" as const,
-    icon: "📸",
-    description: "Send a morning photo",
-    prayer_name: null,
-    display_order: 1,
-    is_active: true,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "daily-call",
-    name: "Daily Call",
-    slug: "daily-call",
-    type: "dual_confirm" as const,
-    category: "relationship" as const,
-    icon: "📞",
-    description: "Check-in call together",
-    prayer_name: null,
-    display_order: 4,
-    is_active: true,
-    created_at: new Date().toISOString(),
-  },
-];
-
 export default function Home() {
-  const { user, partner, isLoading, logout } = useAuth();
+  const { user, partner, isLoading: authLoading, logout } = useAuth();
 
-  // Local state for prayers and habits (mock - will be replaced with Supabase)
-  const [myPrayerStatus, setMyPrayerStatus] = useState({
-    fajr: false,
-    dhuhr: false,
-    asr: false,
-    maghrib: false,
-    isha: false,
+  // Fetch habits from Supabase
+  const {
+    habits: myHabits,
+    isLoading: habitsLoading,
+    toggleHabit,
+  } = useHabits();
+
+  const { habits: partnerHabitsData } = usePartnerHabits();
+
+  // Fetch prayer times from Aladhan API
+  const {
+    currentPrayer,
+    isLoading: prayerTimesLoading,
+  } = usePrayerTimes({
+    city: user?.city || "Dubai",
+    country: user?.country || "AE",
+    timezone: user?.timezone || "Asia/Dubai",
   });
 
-  const [partnerPrayerStatus] = useState({
-    fajr: true,
-    dhuhr: false,
-    asr: false,
-    maghrib: false,
-    isha: false,
-  });
+  // Separate prayers from other habits
+  const { prayerHabits, otherHabits } = useMemo(() => {
+    const prayers = myHabits.filter((h) => h.habit.type === "prayer");
+    const others = myHabits.filter((h) => h.habit.type !== "prayer");
+    return { prayerHabits: prayers, otherHabits: others };
+  }, [myHabits]);
 
-  const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
+  const { partnerPrayerHabits } = useMemo(() => {
+    const prayers = partnerHabitsData.filter((h) => h.habit.type === "prayer");
+    return { partnerPrayerHabits: prayers };
+  }, [partnerHabitsData]);
+
+  // Convert habit logs to PrayerStatus format for PrayerCard
+  const myPrayerStatus = useMemo(() => {
+    const status: Record<PrayerName, boolean> = {
+      fajr: false,
+      dhuhr: false,
+      asr: false,
+      maghrib: false,
+      isha: false,
+    };
+    prayerHabits.forEach((h) => {
+      if (h.habit.prayer_name && h.log) {
+        status[h.habit.prayer_name] = true;
+      }
+    });
+    return status;
+  }, [prayerHabits]);
+
+  const partnerPrayerStatus = useMemo(() => {
+    const status: Record<PrayerName, boolean> = {
+      fajr: false,
+      dhuhr: false,
+      asr: false,
+      maghrib: false,
+      isha: false,
+    };
+    partnerPrayerHabits.forEach((h) => {
+      if (h.habit.prayer_name && h.log) {
+        status[h.habit.prayer_name] = true;
+      }
+    });
+    return status;
+  }, [partnerPrayerHabits]);
+
+  // Toggle prayer handler - finds the habit and toggles it
+  const handleTogglePrayer = async (prayer: PrayerName) => {
+    const prayerHabit = prayerHabits.find(
+      (h) => h.habit.prayer_name === prayer
+    );
+    if (prayerHabit) {
+      toggleHabit(prayerHabit.habit_id, !!prayerHabit.log);
+    }
+  };
+
+  // Toggle other habit handler
+  const handleToggleHabit = (habitId: string, isCompleted: boolean) => {
+    toggleHabit(habitId, isCompleted);
+  };
+
+  // Combined loading state
+  const isLoading = authLoading || habitsLoading || prayerTimesLoading;
 
   // Loading state
   if (isLoading) {
@@ -90,25 +130,6 @@ export default function Home() {
     month: "long",
     day: "numeric",
   });
-
-  const handleTogglePrayer = async (prayer: PrayerName) => {
-    setMyPrayerStatus((prev) => ({
-      ...prev,
-      [prayer]: !prev[prayer],
-    }));
-  };
-
-  const handleToggleHabit = async (habitId: string) => {
-    setCompletedHabits((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(habitId)) {
-        newSet.delete(habitId);
-      } else {
-        newSet.add(habitId);
-      }
-      return newSet;
-    });
-  };
 
   return (
     <div className="min-h-dvh pb-24">
@@ -179,6 +200,31 @@ export default function Home() {
 
       {/* Main content */}
       <main className="p-4 space-y-6">
+        {/* Couple Progress */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+        >
+          <CoupleProgressBar />
+        </motion.section>
+
+        {/* Connection section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.08 }}
+        >
+          <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
+            <span>💕</span> Connect
+          </h2>
+          <div className="space-y-3">
+            <DailyQuestionCard />
+            <CheckInCard />
+            <QuickRitualCard />
+          </div>
+        </motion.section>
+
         {/* Prayer section */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
@@ -195,7 +241,7 @@ export default function Home() {
               userEmoji={user.slug === "ahmad" ? "👨🏻" : "👩🏻"}
               prayerStatus={myPrayerStatus}
               partnerPrayerStatus={partnerPrayerStatus}
-              currentPrayer="asr"
+              currentPrayer={currentPrayer}
               onTogglePrayer={handleTogglePrayer}
               isOwner={true}
               color={myColor}
@@ -207,7 +253,7 @@ export default function Home() {
                 userName={partner.name}
                 userEmoji={partner.slug === "ahmad" ? "👨🏻" : "👩🏻"}
                 prayerStatus={partnerPrayerStatus}
-                currentPrayer="asr"
+                currentPrayer={currentPrayer}
                 onTogglePrayer={handleTogglePrayer}
                 isOwner={false}
                 color={partnerColor}
@@ -217,26 +263,34 @@ export default function Home() {
         </motion.section>
 
         {/* Relationship habits */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
-            <span>💕</span> Together
-          </h2>
-          <div className="space-y-3">
-            {mockHabits.map((habit) => (
-              <HabitCard
-                key={habit.id}
-                habit={habit}
-                isCompleted={completedHabits.has(habit.id)}
-                isPartnerCompleted={habit.id === "morning-photo"}
-                onToggle={() => handleToggleHabit(habit.id)}
-              />
-            ))}
-          </div>
-        </motion.section>
+        {otherHabits.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
+              <span>💕</span> Together
+            </h2>
+            <div className="space-y-3">
+              {otherHabits.map((userHabit) => (
+                <HabitCard
+                  key={userHabit.habit_id}
+                  habit={userHabit.habit}
+                  isCompleted={!!userHabit.log}
+                  isPartnerCompleted={
+                    partnerHabitsData.find(
+                      (ph) => ph.habit.slug === userHabit.habit.slug
+                    )?.log !== null
+                  }
+                  onToggle={() =>
+                    handleToggleHabit(userHabit.habit_id, !!userHabit.log)
+                  }
+                />
+              ))}
+            </div>
+          </motion.section>
+        )}
       </main>
 
       {/* Bottom safe area */}

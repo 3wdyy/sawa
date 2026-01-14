@@ -4,12 +4,6 @@
 -- Description: Initial schema for couple habit tracker
 
 -- ============================================
--- EXTENSIONS
--- ============================================
-
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- ============================================
 -- TYPES
 -- ============================================
 
@@ -29,7 +23,7 @@ CREATE TYPE prayer_name AS ENUM ('fajr', 'dhuhr', 'asr', 'maghrib', 'isha');
 -- Users table
 -- Note: Designed to work with simple selection now, can link to auth.users later
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     slug TEXT UNIQUE NOT NULL, -- 'ahmad' or 'reem' for simple selection
     timezone TEXT NOT NULL DEFAULT 'UTC',
@@ -43,7 +37,7 @@ CREATE TABLE users (
 -- Habits table
 -- Predefined habits that users can track
 CREATE TABLE habits (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     slug TEXT UNIQUE NOT NULL, -- e.g., 'fajr', 'morning-photo', 'daily-call'
     type habit_type NOT NULL,
@@ -59,7 +53,7 @@ CREATE TABLE habits (
 -- User-Habit assignments
 -- Which habits each user tracks
 CREATE TABLE user_habits (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     habit_id UUID NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
     is_active BOOLEAN NOT NULL DEFAULT true,
@@ -72,7 +66,7 @@ CREATE TABLE user_habits (
 -- Habit logs
 -- Individual completions of habits
 CREATE TABLE habit_logs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     habit_id UUID NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
 

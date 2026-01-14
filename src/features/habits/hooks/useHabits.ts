@@ -2,9 +2,17 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchUserHabits, logHabit, removeHabitLog } from "../api/habits";
+import { addCoupleXp } from "@/features/couple/api/couple";
 import { useAuth } from "@/features/auth/context";
 import { getTodayInTimezone } from "@/lib/utils/date";
 import type { Habit, HabitLog, UserHabit } from "@/types/database";
+
+// XP values for different habit types
+const XP_VALUES = {
+  prayer: 10,
+  binary: 15, // Photo habits, etc.
+  dual_confirm: 10,
+} as const;
 
 export type UserHabitWithLog = UserHabit & { habit: Habit; log: HabitLog | null };
 
@@ -31,7 +39,7 @@ export function useHabits() {
 
   // Complete a habit
   const completeMutation = useMutation({
-    mutationFn: ({ habitId }: { habitId: string }) =>
+    mutationFn: ({ habitId }: { habitId: string; habitType: keyof typeof XP_VALUES }) =>
       logHabit(user!.id, habitId, today),
     onMutate: async ({ habitId }) => {
       // Cancel any outgoing refetches
@@ -64,7 +72,18 @@ export function useHabits() {
 
       return { previousHabits };
     },
-    onError: (err, variables, context) => {
+    onSuccess: async (_data, { habitType }) => {
+      // Award XP for completing the habit
+      const xpAmount = XP_VALUES[habitType] || 10;
+      try {
+        await addCoupleXp(xpAmount);
+        // Invalidate couple progress to show updated XP
+        queryClient.invalidateQueries({ queryKey: ["couple-progress"] });
+      } catch (error) {
+        console.error("Failed to add XP:", error);
+      }
+    },
+    onError: (_err, _variables, context) => {
       // Rollback on error
       if (context?.previousHabits) {
         queryClient.setQueryData(queryKey, context.previousHabits);
@@ -106,10 +125,14 @@ export function useHabits() {
 
   // Toggle a habit (complete/uncomplete)
   const toggleHabit = (habitId: string, isCompleted: boolean) => {
+    // Find the habit to get its type for XP calculation
+    const userHabit = habits?.find((h) => h.habit_id === habitId);
+    const habitType = (userHabit?.habit.type || "binary") as keyof typeof XP_VALUES;
+
     if (isCompleted) {
       uncompleteMutation.mutate({ habitId });
     } else {
-      completeMutation.mutate({ habitId });
+      completeMutation.mutate({ habitId, habitType });
     }
   };
 

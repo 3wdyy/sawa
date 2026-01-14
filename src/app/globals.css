@@ -6,33 +6,33 @@
  */
 
 :root {
-  /* Base colors */
-  --background: #0f0f14;
-  --background-secondary: #1a1a24;
-  --background-tertiary: #242432;
+  /* Base colors - V2 deep blue-gray theme */
+  --background: #1a1b2e;
+  --background-secondary: #232438;
+  --background-tertiary: #2d2e45;
   --foreground: #f5f5f7;
   --foreground-muted: #a1a1aa;
 
-  /* Pastel accent palette */
-  --lavender: #c4b5fd;
-  --lavender-soft: #ddd6fe;
-  --lavender-glow: rgba(196, 181, 253, 0.15);
+  /* Pastel accent palette - V2 */
+  --lavender: #a78bfa;
+  --lavender-soft: #c4b5fd;
+  --lavender-glow: rgba(167, 139, 250, 0.15);
 
-  --mint: #86efac;
-  --mint-soft: #bbf7d0;
-  --mint-glow: rgba(134, 239, 172, 0.15);
+  --mint: #6ee7b7;
+  --mint-soft: #a7f3d0;
+  --mint-glow: rgba(110, 231, 183, 0.15);
 
   --peach: #fca5a5;
   --peach-soft: #fecaca;
   --peach-glow: rgba(252, 165, 165, 0.15);
 
-  --rose: #fda4af;
-  --rose-soft: #fecdd3;
-  --rose-glow: rgba(253, 164, 175, 0.15);
+  --rose: #fb7185;
+  --rose-soft: #fda4af;
+  --rose-glow: rgba(251, 113, 133, 0.15);
 
-  --sky: #7dd3fc;
-  --sky-soft: #bae6fd;
-  --sky-glow: rgba(125, 211, 252, 0.15);
+  --sky: #38bdf8;
+  --sky-soft: #7dd3fc;
+  --sky-glow: rgba(56, 189, 248, 0.15);
 
   --gold: #fcd34d;
   --gold-soft: #fde68a;
@@ -44,7 +44,7 @@
   --error: var(--peach);
   --info: var(--sky);
 
-  /* Ahmad & Reem colors */
+  /* Ahmad & Reem colors - V2 */
   --ahmad-color: var(--sky);
   --ahmad-glow: var(--sky-glow);
   --reem-color: var(--rose);
