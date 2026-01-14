@@ -2,6 +2,97 @@
 
 ---
 
+## Session 8 (V2 Session 4) - January 14, 2026 (Late Night)
+
+**Focus:** Social Layer - Reactions, Activity Feed, Shared Inbox, Quests
+
+### Did
+- [x] Created `useReactions` hook:
+  - Send reactions (heart ❤️, celebrate 🎉) to partner completions
+  - Awards +5 XP per reaction sent
+  - Invalidates activity feed after reaction
+- [x] Created `ReactionButtons` component:
+  - Two buttons: heart and celebrate
+  - Shows +5 XP indicator
+  - Used in activity feed for partner completions
+- [x] Created `useActivityFeed` hook:
+  - Fetches recent activity from both users
+  - Real-time Supabase subscription for live updates
+  - Helper functions for activity display (emoji, time formatting)
+- [x] Created `ActivityFeedCard` component:
+  - Shows recent actions with emoji and timestamp
+  - Color-coded by user (sky for me, rose for partner)
+  - Reaction buttons appear on partner completions
+  - Scrollable list with animations
+- [x] Created `useInbox` hook:
+  - Fetches all inbox items grouped by category
+  - Add, complete (for todos), and delete items
+  - 4 categories: Ideas 💡, To-do ✅, Dreams 🌟, Memories 📸
+- [x] Created `SharedInboxCard` component:
+  - Tab navigation between categories
+  - Add new item form
+  - Completion checkbox for todos
+  - Delete button on all items
+  - Color-coded by who added (sky/rose)
+- [x] Created `useQuests` hook:
+  - Fetches daily quests with progress
+  - Complete quest and award variable XP
+  - Stats: completed count, total count, XP available
+- [x] Created `QuestsCard` component:
+  - Progress bar showing completion
+  - Quest list with claim buttons
+  - Shows XP reward per quest
+  - Celebration animation when all complete
+- [x] Wired all components to dashboard with proper animation delays
+- [x] Build & lint pass
+
+### Files Created
+- `src/features/reactions/hooks/useReactions.ts`
+- `src/features/reactions/components/ReactionButtons.tsx`
+- `src/features/activity/hooks/useActivityFeed.ts`
+- `src/features/activity/components/ActivityFeedCard.tsx`
+- `src/features/inbox/hooks/useInbox.ts`
+- `src/features/inbox/components/SharedInboxCard.tsx`
+- `src/features/quests/hooks/useQuests.ts`
+- `src/features/quests/components/QuestsCard.tsx`
+
+### Files Modified
+- `src/app/page.tsx` - Added all new cards to dashboard
+
+### Architecture Notes
+- **Reactions:** `heart` and `celebrate` types, +5 XP each
+- **Activity Feed:** Real-time via Supabase postgres_changes subscription
+- **Inbox Categories:** `idea`, `todo`, `dream`, `memory` (enum)
+- **Quest System:** Daily quests with variable XP rewards (stored in quest.xp_reward)
+- **Activity Types:** habit_complete, prayer_complete, question_answered, checkin_complete, ritual_complete, reaction_sent, quest_complete, level_up, inbox_added, wish_added
+
+### Next (SESSION 5: Visual Polish)
+1. New color palette refinements
+2. Card styling with glows
+3. Wish list feature
+4. Daily quote display
+5. Mobile audit and final polish
+
+### Handoff for Session 5
+
+**Remaining features:**
+- Wish list (API at `src/features/wishes/api/wishes.ts`)
+- Daily quotes (API at `src/features/quotes/api/quotes.ts`)
+
+**UI polish ideas:**
+- Add subtle glow effects to cards
+- Animate XP particles on gain
+- Level up celebration modal
+- Smooth transitions between states
+
+**Testing notes:**
+- Test real-time activity feed by opening two browser tabs
+- Test quest completion and XP awards
+- Test inbox CRUD operations
+- Test reaction buttons on partner activities
+
+---
+
 ## Session 7 (V2 Session 3) - January 14, 2026 (Late Night)
 
 **Focus:** Quick Interactions - Daily Question, Check-In, Quick Ritual

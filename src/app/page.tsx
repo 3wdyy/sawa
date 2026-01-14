@@ -11,6 +11,9 @@ import { CoupleProgressBar } from "@/features/couple/components/CoupleProgressBa
 import { DailyQuestionCard } from "@/features/questions/components/DailyQuestionCard";
 import { CheckInCard } from "@/features/checkin/components/CheckInCard";
 import { QuickRitualCard } from "@/features/ritual/components/QuickRitualCard";
+import { ActivityFeedCard } from "@/features/activity/components/ActivityFeedCard";
+import { SharedInboxCard } from "@/features/inbox/components/SharedInboxCard";
+import { QuestsCard } from "@/features/quests/components/QuestsCard";
 import { useHabits } from "@/features/habits/hooks/useHabits";
 import { usePartnerHabits } from "@/features/habits/hooks/usePartnerHabits";
 import { usePrayerTimes } from "@/features/prayer/hooks/usePrayerTimes";
@@ -225,11 +228,38 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Prayer section */}
+        {/* Quests section */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
+        >
+          <QuestsCard />
+        </motion.section>
+
+        {/* Activity Feed section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.12 }}
+        >
+          <ActivityFeedCard />
+        </motion.section>
+
+        {/* Shared Inbox section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.14 }}
+        >
+          <SharedInboxCard />
+        </motion.section>
+
+        {/* Prayer section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.16 }}
         >
           <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
             <span>🕌</span> Prayers
@@ -267,7 +297,7 @@ export default function Home() {
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.18 }}
           >
             <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
               <span>💕</span> Together
