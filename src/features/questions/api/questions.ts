@@ -8,79 +8,21 @@ import type { DailyQuestion, QuestionResponse, QuestionResponseInsert } from "@/
 const supabase = createClient();
 
 /**
- * Get today's daily question
- * If no question is assigned for today, assigns a random one
+ * Get today's daily question via server API
+ * Server handles assignment with service role key to bypass RLS
  */
 export async function getTodaysQuestion(date: string): Promise<DailyQuestion | null> {
-  // Check if there's already an assigned question for today
-  const { data: assignment } = await supabase
-    .from("daily_question_assignments")
-    .select(`
-      *,
-      question:daily_questions(*)
-    `)
-    .eq("date", date)
-    .single();
-
-  if (assignment?.question) {
-    return assignment.question as unknown as DailyQuestion;
+  try {
+    const response = await fetch(`/api/questions/today?date=${date}`);
+    if (!response.ok) {
+      console.error("Failed to get question:", response.status);
+      return null;
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching question:", error);
+    return null;
   }
-
-  // No question assigned, pick a random one that wasn't used recently
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-  // Get questions used in last 30 days
-  const { data: recentAssignments } = await supabase
-    .from("daily_question_assignments")
-    .select("question_id")
-    .gte("date", thirtyDaysAgo.toISOString().split("T")[0]);
-
-  const recentQuestionIds = recentAssignments?.map((a) => a.question_id) || [];
-
-  // Get a random question not used recently
-  let query = supabase
-    .from("daily_questions")
-    .select("*")
-    .eq("is_active", true);
-
-  if (recentQuestionIds.length > 0) {
-    query = query.not("id", "in", `(${recentQuestionIds.join(",")})`);
-  }
-
-  const { data: questions } = await query;
-
-  if (!questions || questions.length === 0) {
-    // Fallback: get any active question
-    const { data: anyQuestion } = await supabase
-      .from("daily_questions")
-      .select("*")
-      .eq("is_active", true)
-      .limit(1)
-      .single();
-
-    if (!anyQuestion) return null;
-
-    // Assign it to today
-    await supabase.from("daily_question_assignments").insert({
-      question_id: anyQuestion.id,
-      date,
-    });
-
-    return anyQuestion;
-  }
-
-  // Pick a random question
-  const randomIndex = Math.floor(Math.random() * questions.length);
-  const selectedQuestion = questions[randomIndex];
-
-  // Assign it to today
-  await supabase.from("daily_question_assignments").insert({
-    question_id: selectedQuestion.id,
-    date,
-  });
-
-  return selectedQuestion;
 }
 
 /**
