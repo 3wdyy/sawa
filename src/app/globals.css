@@ -6,37 +6,47 @@
  */
 
 :root {
-  /* Base colors - V2 deep blue-gray theme */
-  --background: #1a1b2e;
-  --background-secondary: #232438;
-  --background-tertiary: #2d2e45;
-  --foreground: #f5f5f7;
-  --foreground-muted: #a1a1aa;
+  /* Base colors - V2.1 deeper dark with pop colors */
+  --background: #0f0f1a;
+  --background-secondary: #1a1a2e;
+  --background-tertiary: #252542;
+  --foreground: #ffffff;
+  --foreground-muted: #9ca3af;
 
-  /* Pastel accent palette - V2 */
-  --lavender: #a78bfa;
-  --lavender-soft: #c4b5fd;
-  --lavender-glow: rgba(167, 139, 250, 0.15);
+  /* VIBRANT accent palette - V2.1 brighter, more saturated */
+  --lavender: #a855f7;
+  --lavender-soft: #c084fc;
+  --lavender-glow: rgba(168, 85, 247, 0.25);
 
-  --mint: #6ee7b7;
-  --mint-soft: #a7f3d0;
-  --mint-glow: rgba(110, 231, 183, 0.15);
+  --mint: #34d399;
+  --mint-soft: #6ee7b7;
+  --mint-glow: rgba(52, 211, 153, 0.25);
 
-  --peach: #fca5a5;
-  --peach-soft: #fecaca;
-  --peach-glow: rgba(252, 165, 165, 0.15);
+  --peach: #fb923c;
+  --peach-soft: #fdba74;
+  --peach-glow: rgba(251, 146, 60, 0.25);
 
-  --rose: #fb7185;
-  --rose-soft: #fda4af;
-  --rose-glow: rgba(251, 113, 133, 0.15);
+  --rose: #f43f5e;
+  --rose-soft: #fb7185;
+  --rose-glow: rgba(244, 63, 94, 0.25);
 
-  --sky: #38bdf8;
-  --sky-soft: #7dd3fc;
-  --sky-glow: rgba(56, 189, 248, 0.15);
+  --sky: #0ea5e9;
+  --sky-soft: #38bdf8;
+  --sky-glow: rgba(14, 165, 233, 0.25);
 
-  --gold: #fcd34d;
-  --gold-soft: #fde68a;
-  --gold-glow: rgba(252, 211, 77, 0.15);
+  --gold: #facc15;
+  --gold-soft: #fde047;
+  --gold-glow: rgba(250, 204, 21, 0.25);
+
+  /* NEW: Extra pop colors */
+  --coral: #ff6b6b;
+  --coral-glow: rgba(255, 107, 107, 0.25);
+
+  --cyan: #22d3ee;
+  --cyan-glow: rgba(34, 211, 238, 0.25);
+
+  --lime: #84cc16;
+  --lime-glow: rgba(132, 204, 22, 0.25);
 
   /* Semantic colors */
   --success: var(--mint);
@@ -57,9 +67,9 @@
   --prayer-maghrib: var(--rose);
   --prayer-isha: var(--sky);
 
-  /* Border & UI */
-  --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.15);
+  /* Border & UI - more visible */
+  --border: rgba(255, 255, 255, 0.12);
+  --border-hover: rgba(255, 255, 255, 0.25);
   --ring: var(--lavender);
 
   /* Radius */
@@ -157,9 +167,10 @@ body {
   border: 1px solid var(--border);
 }
 
-/* Gradient text */
+/* Gradient text - more vibrant */
 .gradient-text {
-  background: linear-gradient(135deg, var(--lavender), var(--rose));
+  background: linear-gradient(135deg, var(--lavender), var(--rose), var(--gold));
+  background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -177,19 +188,19 @@ body {
   border-color: var(--border-hover);
 }
 
-/* Card with subtle glow effect */
+/* Card with vibrant glow effect */
 .card-glow {
   box-shadow:
-    0 0 20px rgba(167, 139, 250, 0.05),
-    0 0 40px rgba(167, 139, 250, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 0 20px rgba(168, 85, 247, 0.1),
+    0 0 40px rgba(168, 85, 247, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .card-glow:hover {
   box-shadow:
-    0 0 25px rgba(167, 139, 250, 0.08),
-    0 0 50px rgba(167, 139, 250, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 0 30px rgba(168, 85, 247, 0.15),
+    0 0 60px rgba(168, 85, 247, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 /* Colored card variants */

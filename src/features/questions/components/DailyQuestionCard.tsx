@@ -143,7 +143,7 @@ export function DailyQuestionCard() {
             className="flex items-center gap-2 text-sm text-foreground-muted"
           >
             <span className="text-lg">🔒</span>
-            <span>إجابة {partner?.name} هتظهر بعد ما تجاوب</span>
+            <span dir="rtl">إجابة <bdi>{partner?.name}</bdi> هتظهر بعد ما تجاوب</span>
           </motion.div>
         )}
 
@@ -156,7 +156,7 @@ export function DailyQuestionCard() {
             className="flex items-center gap-2 text-sm text-foreground-muted"
           >
             <span className="text-lg">⏳</span>
-            <span>مستني {partner?.name} يجاوب...</span>
+            <span dir="rtl">مستني <bdi>{partner?.name}</bdi> يجاوب...</span>
           </motion.div>
         )}
 
@@ -168,7 +168,7 @@ export function DailyQuestionCard() {
             exit={{ opacity: 0 }}
             className="p-3 rounded-xl bg-rose/10 border border-rose/30"
           >
-            <p className="text-xs text-rose mb-1">إجابة {partner?.name}</p>
+            <p className="text-xs text-rose mb-1" dir="rtl">إجابة <bdi>{partner?.name}</bdi></p>
             <p className="text-foreground font-medium" dir="rtl">{partnerResponse.answer}</p>
           </motion.div>
         )}

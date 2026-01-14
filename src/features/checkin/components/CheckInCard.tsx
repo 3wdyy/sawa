@@ -165,8 +165,8 @@ export function CheckInCard() {
           <div className="flex items-center gap-2">
             <span className="text-2xl">{getMoodEmoji(partnerCheckIn.mood)}</span>
             <div className="flex-1">
-              <p className="text-xs text-rose">
-                {partner?.name} • النهارده
+              <p className="text-xs text-rose" dir="rtl">
+                <bdi>{partner?.name}</bdi> • النهارده
               </p>
               {partnerCheckIn.note && (
                 <p className="text-sm text-foreground" dir="rtl">{partnerCheckIn.note}</p>
@@ -175,8 +175,8 @@ export function CheckInCard() {
           </div>
         </motion.div>
       ) : (
-        <p className="text-sm text-foreground-muted text-center">
-          {partner?.name} لسه ما عملش check-in
+        <p className="text-sm text-foreground-muted text-center" dir="rtl">
+          <bdi>{partner?.name}</bdi> لسه ما عملش check-in
         </p>
       )}
     </motion.div>

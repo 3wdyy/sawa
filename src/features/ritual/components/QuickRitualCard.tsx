@@ -87,7 +87,7 @@ export function QuickRitualCard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-lavender flex items-center gap-2">
-          <span>✨</span> Ritual سريع
+          <span>✨</span> Ritual يومي
         </span>
         {hasCompleted && (
           <span className="text-xs px-2 py-0.5 rounded-full bg-mint/20 text-mint">
@@ -178,14 +178,14 @@ export function QuickRitualCard() {
               className="space-y-3"
             >
               <div className="flex items-center justify-between">
-                <p className="text-sm text-foreground-muted">
-                  <span className="text-lavender font-medium">3/3</span> ابعت vibe لـ {partner?.name}:
+                <p className="text-sm text-foreground-muted" dir="rtl">
+                  <span className="text-lavender font-medium">3/3</span> ابعت vibe لـ <bdi>{partner?.name}</bdi>
                 </p>
                 <button
                   onClick={() => setStep(2)}
                   className="text-xs text-foreground-muted hover:text-foreground"
                 >
-                  ← رجوع
+                  رجوع →
                 </button>
               </div>
 
@@ -266,7 +266,7 @@ export function QuickRitualCard() {
           animate={{ opacity: 1 }}
           className="p-3 rounded-xl bg-rose/10 border border-rose/30"
         >
-          <p className="text-xs text-rose mb-2">الـ ritual بتاع {partner?.name}</p>
+          <p className="text-xs text-rose mb-2" dir="rtl">ritual <bdi>{partner?.name}</bdi></p>
           <div className="flex items-center gap-4 text-sm">
             <span title="Mood">{getMoodEmoji(partnerRitual.mood)}</span>
             <span title="Energy" className="text-foreground-muted">
@@ -276,8 +276,8 @@ export function QuickRitualCard() {
           </div>
         </motion.div>
       ) : (
-        <p className="text-sm text-foreground-muted text-center">
-          {partner?.name} لسه ما عملش ritual
+        <p className="text-sm text-foreground-muted text-center" dir="rtl">
+          <bdi>{partner?.name}</bdi> لسه ما عملش ritual
         </p>
       )}
     </motion.div>
