@@ -46,6 +46,7 @@ export function DailyQuoteCard() {
       {/* Quote text */}
       <motion.p
         className="text-sm text-center text-foreground/90 italic leading-relaxed px-4"
+        dir="rtl"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.15 }}
@@ -57,6 +58,7 @@ export function DailyQuoteCard() {
       {quote.source && (
         <motion.p
           className="text-xs text-center text-lavender mt-2"
+          dir="rtl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}

@@ -76,7 +76,7 @@ export function WishListCard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-lavender flex items-center gap-2">
-          <span>🌟</span> Wishes
+          <span>🌟</span> أمنيات
         </span>
         {activeTab === "mine" && (
           <motion.button
@@ -85,7 +85,7 @@ export function WishListCard() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            {isAddingNew ? "Cancel" : "+ Add"}
+            {isAddingNew ? "إلغاء" : "+ أضف"}
           </motion.button>
         )}
       </div>
@@ -104,8 +104,8 @@ export function WishListCard() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <span className="mr-1">✨</span>
-          My Wishes
+          <span className="ml-1">✨</span>
+          أمنياتي
           {myUnfulfilled.length > 0 && (
             <span className="ml-1 opacity-60">({myUnfulfilled.length})</span>
           )}
@@ -122,8 +122,8 @@ export function WishListCard() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <span className="mr-1">🎁</span>
-          {partner?.name}&apos;s
+          <span className="ml-1">🎁</span>
+          أمنيات <bdi>{partner?.name}</bdi>
           {partnerUnfulfilled.length > 0 && (
             <span className="ml-1 opacity-60">({partnerUnfulfilled.length})</span>
           )}
@@ -156,7 +156,7 @@ export function WishListCard() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              Add
+              أضف
             </motion.button>
           </motion.div>
         )}
@@ -164,10 +164,10 @@ export function WishListCard() {
 
       {/* Wishes list */}
       {activeWishes.length === 0 ? (
-        <p className="text-sm text-foreground-muted text-center py-4">
+        <p className="text-sm text-foreground-muted text-center py-4" dir="rtl">
           {activeTab === "mine"
-            ? "Add things you'd love!"
-            : `${partner?.name} hasn't added wishes yet`}
+            ? "أضف حاجات نفسك فيها!"
+            : <><bdi>{partner?.name}</bdi> لسه ما ضافش أمنيات</>}
         </p>
       ) : (
         <div className="space-y-2 max-h-48 overflow-y-auto">
@@ -197,7 +197,7 @@ export function WishListCard() {
             <span className="transform transition-transform duration-200" style={{ rotate: showArchive ? "90deg" : "0deg" }}>
               ▶
             </span>
-            <span>Fulfilled ({archivedWishes.length})</span>
+            <span>متحققة ({archivedWishes.length})</span>
           </motion.button>
           <AnimatePresence>
             {showArchive && (

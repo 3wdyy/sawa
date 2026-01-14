@@ -19,10 +19,10 @@ export const INBOX_CATEGORIES: {
   emoji: string;
   label: string;
 }[] = [
-  { id: "idea", emoji: "💡", label: "Ideas" },
-  { id: "todo", emoji: "✅", label: "To-do" },
-  { id: "dream", emoji: "🌟", label: "Dreams" },
-  { id: "memory", emoji: "📸", label: "Memories" },
+  { id: "idea", emoji: "💡", label: "أفكار" },
+  { id: "todo", emoji: "✅", label: "مهام" },
+  { id: "dream", emoji: "🌟", label: "أحلام" },
+  { id: "memory", emoji: "📸", label: "ذكريات" },
 ];
 
 /**

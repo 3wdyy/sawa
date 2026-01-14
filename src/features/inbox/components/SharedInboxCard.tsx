@@ -55,7 +55,7 @@ export function SharedInboxCard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-lavender flex items-center gap-2">
-          <span>📥</span> Our Inbox
+          <span>📥</span> صندوقنا
         </span>
         <motion.button
           onClick={() => setIsAddingNew(!isAddingNew)}
@@ -63,7 +63,7 @@ export function SharedInboxCard() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {isAddingNew ? "Cancel" : "+ Add"}
+          {isAddingNew ? "إلغاء" : "+ أضف"}
         </motion.button>
       </div>
 
@@ -121,7 +121,7 @@ export function SharedInboxCard() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              Add
+              أضف
             </motion.button>
           </motion.div>
         )}
@@ -129,8 +129,8 @@ export function SharedInboxCard() {
 
       {/* Items list */}
       {activeItems.length === 0 ? (
-        <p className="text-sm text-foreground-muted text-center py-4">
-          No {activeInfo.label.toLowerCase()} yet
+        <p className="text-sm text-foreground-muted text-center py-4" dir="rtl">
+          مفيش {activeInfo.label} لسه
         </p>
       ) : (
         <div className="space-y-2 max-h-48 overflow-y-auto">

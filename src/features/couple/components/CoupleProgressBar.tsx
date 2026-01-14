@@ -131,10 +131,10 @@ export function CoupleProgressBar({ className, showXpGain }: CoupleProgressBarPr
 
           {/* XP to next level */}
           <div className="mt-1.5 flex items-center justify-between">
-            <span className="text-xs text-foreground-muted">
+            <span className="text-xs text-foreground-muted" dir="rtl">
               {xpToNextLevel - totalXp > 0
-                ? `${(xpToNextLevel - totalXp).toLocaleString()} XP to next level`
-                : "Ready to level up!"}
+                ? `${(xpToNextLevel - totalXp).toLocaleString()} XP للمستوى الجاي`
+                : "جاهز للمستوى الجاي!"}
             </span>
             <span className="text-xs text-gold font-medium">{progressPercent}%</span>
           </div>

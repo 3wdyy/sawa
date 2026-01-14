@@ -68,7 +68,7 @@ export function DailyQuestionCard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-lavender flex items-center gap-2">
-          <span>❓</span> Daily Question
+          <span>❓</span> سؤال اليوم
         </span>
         {hasAnswered && (
           <span className="text-xs px-2 py-0.5 rounded-full bg-mint/20 text-mint">
@@ -78,7 +78,7 @@ export function DailyQuestionCard() {
       </div>
 
       {/* Question text */}
-      <p className="text-lg font-medium text-foreground">
+      <p className="text-lg font-medium text-foreground" dir="rtl">
         {question.question}
       </p>
 
@@ -183,7 +183,7 @@ export function DailyQuestionCard() {
           whileTap={{ scale: 0.98 }}
         >
           <span>🔄</span>
-          <span>Shuffle - 1 left today</span>
+          <span>تغيير السؤال - ١ باقي</span>
         </motion.button>
       )}
     </motion.div>

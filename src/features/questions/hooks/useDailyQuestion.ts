@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/features/auth/context";
 import { useCoupleProgress } from "@/features/couple/hooks/useCoupleProgress";
 import {
@@ -16,15 +17,60 @@ import type { DailyQuestion } from "@/types/database";
 
 const XP_FOR_QUESTION = 25;
 
+// Local storage key for tracking shuffles per user per day
+const SHUFFLE_STORAGE_KEY = "sawa_question_shuffles";
+
 /**
  * Hook for managing daily question interactions
  */
+/**
+ * Get shuffles used from localStorage
+ */
+function getLocalShuffles(userId: string, date: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const data = localStorage.getItem(SHUFFLE_STORAGE_KEY);
+    if (!data) return 0;
+    const parsed = JSON.parse(data);
+    return parsed[`${userId}_${date}`] || 0;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * Save shuffles used to localStorage
+ */
+function setLocalShuffles(userId: string, date: string, count: number): void {
+  if (typeof window === "undefined") return;
+  try {
+    const data = localStorage.getItem(SHUFFLE_STORAGE_KEY);
+    const parsed = data ? JSON.parse(data) : {};
+    // Clean up old dates (keep only current day)
+    const cleaned: Record<string, number> = {};
+    cleaned[`${userId}_${date}`] = count;
+    localStorage.setItem(SHUFFLE_STORAGE_KEY, JSON.stringify(cleaned));
+  } catch {
+    // Ignore storage errors
+  }
+}
+
 export function useDailyQuestion() {
   const { user, partner } = useAuth();
   const queryClient = useQueryClient();
   const { addXp } = useCoupleProgress();
   // Use Fajr-based day (day resets at Fajr, not midnight)
   const today = user ? getSawaDay(user.timezone) : new Date().toISOString().split("T")[0];
+
+  // Track shuffles in local state (initialized from localStorage)
+  const [localShufflesUsed, setLocalShufflesUsed] = useState(0);
+
+  // Initialize from localStorage on mount
+  useEffect(() => {
+    if (user) {
+      setLocalShufflesUsed(getLocalShuffles(user.id, today));
+    }
+  }, [user, today]);
 
   const questionKey = ["daily-question", today];
   const myResponseKey = ["question-response", user?.id, today];
@@ -98,6 +144,11 @@ export function useDailyQuestion() {
     },
     onSuccess: (newQuestion) => {
       if (newQuestion) {
+        // Update local shuffle count and persist to localStorage
+        const newCount = localShufflesUsed + 1;
+        setLocalShufflesUsed(newCount);
+        setLocalShuffles(user!.id, today, newCount);
+        // Update question in cache
         queryClient.setQueryData<DailyQuestion>(questionKey, newQuestion);
       }
     },
@@ -114,7 +165,8 @@ export function useDailyQuestion() {
   const hasAnswered = !!myResponseValid;
   const partnerHasAnswered = !!partnerResponseValid;
   const canSeePartnerAnswer = hasAnswered && partnerHasAnswered;
-  const shufflesUsed = myResponse?.shuffles_used || 0;
+  // Use local storage for shuffle tracking (persists across refreshes)
+  const shufflesUsed = Math.max(myResponse?.shuffles_used || 0, localShufflesUsed);
   const canShuffle = !hasAnswered && shufflesUsed < 1;
 
   return {

@@ -38,15 +38,15 @@ export function ActivityFeedCard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-lavender flex items-center gap-2">
-          <span>📡</span> Activity
+          <span>📡</span> نشاط
         </span>
-        <span className="text-xs text-foreground-muted">Live</span>
+        <span className="text-xs text-foreground-muted">مباشر</span>
       </div>
 
       {/* Activity list */}
       {activities.length === 0 ? (
-        <p className="text-sm text-foreground-muted text-center py-4">
-          No activity yet today
+        <p className="text-sm text-foreground-muted text-center py-4" dir="rtl">
+          مفيش نشاط النهارده
         </p>
       ) : (
         <div className="space-y-2 max-h-64 overflow-y-auto">
@@ -58,8 +58,8 @@ export function ActivityFeedCard() {
               const userName = isPartner
                 ? partner?.name
                 : isMe
-                ? "You"
-                : "Someone";
+                ? "أنت"
+                : "حد";
 
               // Can react to partner's completions (not reactions, not your own)
               const canReact =

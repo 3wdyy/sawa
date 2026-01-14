@@ -29,13 +29,13 @@ export const PRAYER_NAMES = [
   "isha",
 ] as const;
 
-// Prayer display names
+// Prayer display names (Arabic)
 export const PRAYER_DISPLAY_NAMES: Record<string, string> = {
-  fajr: "Fajr",
-  dhuhr: "Dhuhr",
-  asr: "Asr",
-  maghrib: "Maghrib",
-  isha: "Isha",
+  fajr: "الفجر",
+  dhuhr: "الظهر",
+  asr: "العصر",
+  maghrib: "المغرب",
+  isha: "العشاء",
 };
 
 // Aladhan API base URL

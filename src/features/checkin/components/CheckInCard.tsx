@@ -127,7 +127,7 @@ export function CheckInCard() {
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                 >
-                  {isSubmitting ? "جاري..." : "Check In ✨"}
+                  {isSubmitting ? "جاري..." : "سجّل ✨"}
                 </motion.button>
               </motion.div>
             )}
@@ -176,7 +176,7 @@ export function CheckInCard() {
         </motion.div>
       ) : (
         <p className="text-sm text-foreground-muted text-center" dir="rtl">
-          <bdi>{partner?.name}</bdi> لسه ما عملش check-in
+          <bdi>{partner?.name}</bdi> لسه ما سجّلش
         </p>
       )}
     </motion.div>

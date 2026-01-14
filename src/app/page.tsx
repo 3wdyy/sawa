@@ -16,6 +16,7 @@ import { SharedInboxCard } from "@/features/inbox/components/SharedInboxCard";
 import { QuestsCard } from "@/features/quests/components/QuestsCard";
 import { DailyQuoteCard } from "@/features/quotes/components/DailyQuoteCard";
 import { WishListCard } from "@/features/wishes/components/WishListCard";
+import { ThemeToggle } from "@/features/theme";
 import { useHabits } from "@/features/habits/hooks/useHabits";
 import { usePartnerHabits } from "@/features/habits/hooks/usePartnerHabits";
 import { usePrayerTimes } from "@/features/prayer/hooks/usePrayerTimes";
@@ -159,7 +160,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {partner && (
               <motion.div
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background-secondary border border-border"
@@ -177,6 +178,9 @@ export default function Home() {
                 </span>
               </motion.div>
             )}
+
+            {/* Theme toggle */}
+            <ThemeToggle />
 
             <motion.button
               onClick={logout}
@@ -230,7 +234,7 @@ export default function Home() {
           transition={{ delay: 0.08 }}
         >
           <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
-            <span>💕</span> Connect
+            <span>💕</span> تواصل
           </h2>
           <div className="space-y-3">
             <DailyQuestionCard />
@@ -273,7 +277,7 @@ export default function Home() {
           transition={{ delay: 0.17 }}
         >
           <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
-            <span>🕌</span> Prayers
+            <span>🕌</span> الصلاة
           </h2>
           <div className="space-y-3">
             {/* My prayers */}
@@ -311,7 +315,7 @@ export default function Home() {
             transition={{ delay: 0.19 }}
           >
             <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
-              <span>💕</span> Together
+              <span>💕</span> سوا
             </h2>
             <div className="space-y-3">
               {otherHabits.map((userHabit) => (

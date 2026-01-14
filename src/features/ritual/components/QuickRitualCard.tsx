@@ -87,7 +87,7 @@ export function QuickRitualCard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-lavender flex items-center gap-2">
-          <span>✨</span> Ritual يومي
+          <span>✨</span> الطقوس اليومية
         </span>
         {hasCompleted && (
           <span className="text-xs px-2 py-0.5 rounded-full bg-mint/20 text-mint">
@@ -243,7 +243,7 @@ export function QuickRitualCard() {
       {/* Completed - show summary */}
       {hasCompleted && myRitual && (
         <div className="p-3 rounded-xl bg-sky/10 border border-sky/30">
-          <p className="text-xs text-sky mb-2">الـ ritual بتاعك</p>
+          <p className="text-xs text-sky mb-2">الطقوس بتاعتك</p>
           <div className="flex items-center gap-4 text-sm">
             <span title="Mood">{getMoodEmoji(myRitual.mood)}</span>
             <span title="Energy" className="text-foreground-muted">
@@ -266,7 +266,7 @@ export function QuickRitualCard() {
           animate={{ opacity: 1 }}
           className="p-3 rounded-xl bg-rose/10 border border-rose/30"
         >
-          <p className="text-xs text-rose mb-2" dir="rtl">ritual <bdi>{partner?.name}</bdi></p>
+          <p className="text-xs text-rose mb-2" dir="rtl">طقوس <bdi>{partner?.name}</bdi></p>
           <div className="flex items-center gap-4 text-sm">
             <span title="Mood">{getMoodEmoji(partnerRitual.mood)}</span>
             <span title="Energy" className="text-foreground-muted">
@@ -277,7 +277,7 @@ export function QuickRitualCard() {
         </motion.div>
       ) : (
         <p className="text-sm text-foreground-muted text-center" dir="rtl">
-          <bdi>{partner?.name}</bdi> لسه ما عملش ritual
+          <bdi>{partner?.name}</bdi> لسه ما عملش الطقوس
         </p>
       )}
     </motion.div>

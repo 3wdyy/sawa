@@ -39,7 +39,7 @@ export function QuestsCard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-lavender flex items-center gap-2">
-          <span>🏆</span> Daily Quests
+          <span>🏆</span> مهام يومية
         </span>
         <div className="flex items-center gap-2">
           <span className="text-xs text-foreground-muted">
@@ -47,7 +47,7 @@ export function QuestsCard() {
           </span>
           {totalXpAvailable > 0 && (
             <span className="text-xs px-2 py-0.5 rounded-full bg-gold/20 text-gold">
-              {totalXpAvailable} XP left
+              {totalXpAvailable} XP باقي
             </span>
           )}
         </div>
@@ -67,8 +67,8 @@ export function QuestsCard() {
 
       {/* Quest list */}
       {quests.length === 0 ? (
-        <p className="text-sm text-foreground-muted text-center py-4">
-          No quests available today
+        <p className="text-sm text-foreground-muted text-center py-4" dir="rtl">
+          مفيش مهام النهارده
         </p>
       ) : (
         <div className="space-y-2">
@@ -149,7 +149,7 @@ export function QuestsCard() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    Claim +{quest.xp_reward}
+                    احصل +{quest.xp_reward}
                   </motion.button>
                 )}
               </motion.div>
@@ -166,8 +166,8 @@ export function QuestsCard() {
           className="text-center py-2"
         >
           <span className="text-2xl">🎉</span>
-          <p className="text-sm text-mint font-medium mt-1">
-            All quests completed!
+          <p className="text-sm text-mint font-medium mt-1" dir="rtl">
+            خلصت كل المهام!
           </p>
         </motion.div>
       )}

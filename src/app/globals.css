@@ -5,15 +5,27 @@
  * Vibe: Soft pastel on dark - romantic, playful, calming
  */
 
+/* ===========================================
+   THEME SYSTEM - 4 Color Themes
+   =========================================== */
+
 :root {
-  /* Base colors - V2.1 deeper dark with pop colors */
+  /* Radius - shared across themes */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+/* ===== THEME 1: Default (Original Purple) ===== */
+[data-theme="default"], :root:not([data-theme]) {
   --background: #0f0f1a;
   --background-secondary: #1a1a2e;
   --background-tertiary: #252542;
   --foreground: #ffffff;
   --foreground-muted: #9ca3af;
 
-  /* VIBRANT accent palette - V2.1 brighter, more saturated */
   --lavender: #a855f7;
   --lavender-soft: #c084fc;
   --lavender-glow: rgba(168, 85, 247, 0.25);
@@ -38,46 +50,184 @@
   --gold-soft: #fde047;
   --gold-glow: rgba(250, 204, 21, 0.25);
 
-  /* NEW: Extra pop colors */
-  --coral: #ff6b6b;
-  --coral-glow: rgba(255, 107, 107, 0.25);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-hover: rgba(255, 255, 255, 0.25);
+  --ring: var(--lavender);
+}
 
-  --cyan: #22d3ee;
-  --cyan-glow: rgba(34, 211, 238, 0.25);
+/* ===== THEME 2: Warm Sunset ===== */
+[data-theme="sunset"] {
+  --background: #1a0f0f;
+  --background-secondary: #2e1a1a;
+  --background-tertiary: #422525;
+  --foreground: #fff5f0;
+  --foreground-muted: #c9a89a;
 
-  --lime: #84cc16;
-  --lime-glow: rgba(132, 204, 22, 0.25);
+  --lavender: #ff6b9d;
+  --lavender-soft: #ff9dc0;
+  --lavender-glow: rgba(255, 107, 157, 0.25);
 
-  /* Semantic colors */
+  --mint: #f59e0b;
+  --mint-soft: #fbbf24;
+  --mint-glow: rgba(245, 158, 11, 0.25);
+
+  --peach: #ff7b54;
+  --peach-soft: #ffa07a;
+  --peach-glow: rgba(255, 123, 84, 0.25);
+
+  --rose: #ff4757;
+  --rose-soft: #ff6b7a;
+  --rose-glow: rgba(255, 71, 87, 0.25);
+
+  --sky: #ffc048;
+  --sky-soft: #ffd280;
+  --sky-glow: rgba(255, 192, 72, 0.25);
+
+  --gold: #ff9f43;
+  --gold-soft: #ffbe76;
+  --gold-glow: rgba(255, 159, 67, 0.25);
+
+  --border: rgba(255, 200, 180, 0.15);
+  --border-hover: rgba(255, 200, 180, 0.3);
+  --ring: var(--rose);
+}
+
+/* ===== THEME 3: Neon Dreams ===== */
+[data-theme="neon"] {
+  --background: #000000;
+  --background-secondary: #0d0d0d;
+  --background-tertiary: #1a1a1a;
+  --foreground: #ffffff;
+  --foreground-muted: #888888;
+
+  --lavender: #ff00ff;
+  --lavender-soft: #ff66ff;
+  --lavender-glow: rgba(255, 0, 255, 0.35);
+
+  --mint: #00ff88;
+  --mint-soft: #66ffaa;
+  --mint-glow: rgba(0, 255, 136, 0.35);
+
+  --peach: #ff6600;
+  --peach-soft: #ff9944;
+  --peach-glow: rgba(255, 102, 0, 0.35);
+
+  --rose: #ff0066;
+  --rose-soft: #ff4488;
+  --rose-glow: rgba(255, 0, 102, 0.35);
+
+  --sky: #00ffff;
+  --sky-soft: #66ffff;
+  --sky-glow: rgba(0, 255, 255, 0.35);
+
+  --gold: #ffff00;
+  --gold-soft: #ffff66;
+  --gold-glow: rgba(255, 255, 0, 0.35);
+
+  --border: rgba(255, 255, 255, 0.15);
+  --border-hover: rgba(255, 0, 255, 0.4);
+  --ring: var(--sky);
+}
+
+/* ===== THEME 4: Ocean Depths ===== */
+[data-theme="ocean"] {
+  --background: #0a1628;
+  --background-secondary: #132238;
+  --background-tertiary: #1e3a5f;
+  --foreground: #e0f7fa;
+  --foreground-muted: #80cbc4;
+
+  --lavender: #7c4dff;
+  --lavender-soft: #a78bfa;
+  --lavender-glow: rgba(124, 77, 255, 0.25);
+
+  --mint: #00e5bf;
+  --mint-soft: #4dffd4;
+  --mint-glow: rgba(0, 229, 191, 0.25);
+
+  --peach: #ff8a65;
+  --peach-soft: #ffab91;
+  --peach-glow: rgba(255, 138, 101, 0.25);
+
+  --rose: #ff5c8d;
+  --rose-soft: #ff8aad;
+  --rose-glow: rgba(255, 92, 141, 0.25);
+
+  --sky: #00d4ff;
+  --sky-soft: #4de4ff;
+  --sky-glow: rgba(0, 212, 255, 0.3);
+
+  --gold: #64ffda;
+  --gold-soft: #a7ffeb;
+  --gold-glow: rgba(100, 255, 218, 0.25);
+
+  --border: rgba(100, 255, 218, 0.12);
+  --border-hover: rgba(100, 255, 218, 0.25);
+  --ring: var(--sky);
+}
+
+/* ===== THEME 5: Soft Pastels ===== */
+[data-theme="pastel"] {
+  --background: #faf5ff;
+  --background-secondary: #f3e8ff;
+  --background-tertiary: #e9d5ff;
+  --foreground: #1e1b4b;
+  --foreground-muted: #6b7280;
+
+  --lavender: #a78bfa;
+  --lavender-soft: #c4b5fd;
+  --lavender-glow: rgba(167, 139, 250, 0.3);
+
+  --mint: #34d399;
+  --mint-soft: #6ee7b7;
+  --mint-glow: rgba(52, 211, 153, 0.3);
+
+  --peach: #fb923c;
+  --peach-soft: #fdba74;
+  --peach-glow: rgba(251, 146, 60, 0.3);
+
+  --rose: #f472b6;
+  --rose-soft: #f9a8d4;
+  --rose-glow: rgba(244, 114, 182, 0.3);
+
+  --sky: #38bdf8;
+  --sky-soft: #7dd3fc;
+  --sky-glow: rgba(56, 189, 248, 0.3);
+
+  --gold: #fbbf24;
+  --gold-soft: #fcd34d;
+  --gold-glow: rgba(251, 191, 36, 0.3);
+
+  --border: rgba(0, 0, 0, 0.1);
+  --border-hover: rgba(0, 0, 0, 0.2);
+  --ring: var(--lavender);
+}
+
+/* ===== Shared Semantic Colors (all themes) ===== */
+[data-theme], :root:not([data-theme]) {
   --success: var(--mint);
   --warning: var(--gold);
   --error: var(--peach);
   --info: var(--sky);
 
-  /* Ahmad & Reem colors - V2 */
   --ahmad-color: var(--sky);
   --ahmad-glow: var(--sky-glow);
   --reem-color: var(--rose);
   --reem-glow: var(--rose-glow);
 
-  /* Prayer colors */
   --prayer-fajr: var(--lavender);
   --prayer-dhuhr: var(--gold);
   --prayer-asr: var(--peach);
   --prayer-maghrib: var(--rose);
   --prayer-isha: var(--sky);
 
-  /* Border & UI - more visible */
-  --border: rgba(255, 255, 255, 0.12);
-  --border-hover: rgba(255, 255, 255, 0.25);
-  --ring: var(--lavender);
-
-  /* Radius */
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-full: 9999px;
+  /* Extra pop colors */
+  --coral: #ff6b6b;
+  --coral-glow: rgba(255, 107, 107, 0.25);
+  --cyan: #22d3ee;
+  --cyan-glow: rgba(34, 211, 238, 0.25);
+  --lime: #84cc16;
+  --lime-glow: rgba(132, 204, 22, 0.25);
 }
 
 @theme inline {

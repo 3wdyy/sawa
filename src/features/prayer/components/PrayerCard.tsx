@@ -75,9 +75,9 @@ export function PrayerCard({
           {userEmoji}
         </motion.div>
         <div className="flex-1">
-          <h3 className="font-medium">{userName}&apos;s Prayers</h3>
-          <p className="text-sm text-foreground-muted">
-            {completedCount}/5 completed
+          <h3 className="font-medium" dir="rtl">صلوات <bdi>{userName}</bdi></h3>
+          <p className="text-sm text-foreground-muted" dir="rtl">
+            {completedCount}/5 مكتملة
           </p>
         </div>
 
