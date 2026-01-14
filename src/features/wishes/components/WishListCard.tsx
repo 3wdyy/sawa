@@ -143,8 +143,9 @@ export function WishListCard() {
               type="text"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              placeholder="Something I'd love..."
-              className="flex-1 py-2 px-3 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors text-sm"
+              placeholder="حاجة نفسي فيها..."
+              className="flex-1 py-2 px-3 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors text-sm text-right"
+              dir="rtl"
               onKeyDown={(e) => e.key === "Enter" && handleAdd()}
               autoFocus
             />
@@ -214,7 +215,7 @@ export function WishListCard() {
                     className="p-2 rounded-lg bg-mint/5 border border-mint/20 flex items-center gap-2"
                   >
                     <span className="text-mint">✓</span>
-                    <span className="text-sm text-foreground-muted line-through flex-1">
+                    <span className="text-sm text-foreground-muted line-through flex-1" dir="rtl">
                       {wish.title}
                     </span>
                   </motion.div>
@@ -260,9 +261,9 @@ function WishItem({
       }`}
     >
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-foreground">{wish.title}</p>
+        <p className="text-sm text-foreground" dir="rtl">{wish.title}</p>
         {wish.description && (
-          <p className="text-xs text-foreground-muted truncate">
+          <p className="text-xs text-foreground-muted truncate" dir="rtl">
             {wish.description}
           </p>
         )}

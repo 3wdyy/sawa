@@ -8,13 +8,11 @@ import {
   getPartnerCheckIn,
   submitCheckIn,
 } from "../api/checkin";
+import { logActivity } from "@/features/activity/api/activity";
+import { getSawaDay } from "@/lib/utils/date";
 import type { MoodType } from "@/types/database";
 
 const XP_FOR_CHECKIN = 10;
-
-function getToday(): string {
-  return new Date().toISOString().split("T")[0];
-}
 
 /**
  * Hook for managing daily check-in (mood pulse)
@@ -23,7 +21,8 @@ export function useCheckIn() {
   const { user, partner } = useAuth();
   const queryClient = useQueryClient();
   const { addXp } = useCoupleProgress();
-  const today = getToday();
+  // Use Fajr-based day (day resets at Fajr, not midnight)
+  const today = user ? getSawaDay(user.timezone) : new Date().toISOString().split("T")[0];
 
   const myCheckInKey = ["checkin", user?.id, today];
   const partnerCheckInKey = ["checkin", partner?.id, today];
@@ -52,7 +51,19 @@ export function useCheckIn() {
   const submitMutation = useMutation({
     mutationFn: async ({ mood, note }: { mood: MoodType; note?: string }) => {
       if (!user) throw new Error("No user");
-      return submitCheckIn(user.id, today, mood, note);
+      const result = await submitCheckIn(user.id, today, mood, note);
+      // Log activity (only on first check-in)
+      if (!myCheckIn && result) {
+        await logActivity(
+          user.id,
+          "checkin_complete",
+          `عمل check-in 💭`,
+          "checkin",
+          result.id,
+          XP_FOR_CHECKIN
+        );
+      }
+      return result;
     },
     onSuccess: () => {
       // Award XP only if first check-in today
@@ -61,6 +72,7 @@ export function useCheckIn() {
       }
       // Invalidate queries
       queryClient.invalidateQueries({ queryKey: myCheckInKey });
+      queryClient.invalidateQueries({ queryKey: ["activity-feed"] });
     },
   });
 

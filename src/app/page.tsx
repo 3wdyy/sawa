@@ -239,15 +239,6 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Quests section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <QuestsCard />
-        </motion.section>
-
         {/* Activity Feed section */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
@@ -341,6 +332,15 @@ export default function Home() {
             </div>
           </motion.section>
         )}
+
+        {/* Quests section - at the end */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.21 }}
+        >
+          <QuestsCard />
+        </motion.section>
       </main>
 
       {/* Bottom safe area */}

@@ -108,8 +108,9 @@ export function SharedInboxCard() {
               type="text"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              placeholder={`Add to ${activeInfo.label.toLowerCase()}...`}
-              className="flex-1 py-2 px-3 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors text-sm"
+              placeholder={`أضف لـ ${activeInfo.label}...`}
+              className="flex-1 py-2 px-3 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors text-sm text-right"
+              dir="rtl"
               onKeyDown={(e) => e.key === "Enter" && handleAdd()}
               autoFocus
             />
@@ -173,6 +174,7 @@ export function SharedInboxCard() {
                               ? "text-foreground-muted line-through"
                               : "text-foreground"
                           }`}
+                          dir="rtl"
                         >
                           {item.title}
                         </p>

@@ -7,12 +7,12 @@ import { useAuth } from "@/features/auth/context";
 import type { MoodType } from "@/types/database";
 
 const MOOD_OPTIONS: { mood: MoodType; emoji: string; label: string }[] = [
-  { mood: "great", emoji: "😊", label: "Great" },
-  { mood: "okay", emoji: "😐", label: "Okay" },
-  { mood: "low", emoji: "😔", label: "Low" },
-  { mood: "stressed", emoji: "😤", label: "Stressed" },
-  { mood: "tired", emoji: "😴", label: "Tired" },
-  { mood: "excited", emoji: "🤩", label: "Excited" },
+  { mood: "great", emoji: "😊", label: "مبسوط" },
+  { mood: "okay", emoji: "😐", label: "عادي" },
+  { mood: "low", emoji: "😔", label: "زعلان" },
+  { mood: "stressed", emoji: "😤", label: "متضايق" },
+  { mood: "tired", emoji: "😴", label: "تعبان" },
+  { mood: "excited", emoji: "🤩", label: "فرحان" },
 ];
 
 function getMoodEmoji(mood: MoodType): string {
@@ -71,7 +71,7 @@ export function CheckInCard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-lavender flex items-center gap-2">
-          <span>💭</span> How are you feeling?
+          <span>💭</span> عامل/ة إيه؟
         </span>
         {hasCheckedIn && (
           <span className="text-xs px-2 py-0.5 rounded-full bg-mint/20 text-mint">
@@ -116,8 +116,9 @@ export function CheckInCard() {
                   type="text"
                   value={note}
                   onChange={(e) => setNote(e.target.value.slice(0, 50))}
-                  placeholder="Quick note (optional)..."
-                  className="w-full py-3 px-4 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors text-sm"
+                  placeholder="تعليق قصير (اختياري)..."
+                  className="w-full py-3 px-4 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors text-sm text-right"
+                  dir="rtl"
                 />
                 <motion.button
                   onClick={handleSubmit}
@@ -126,7 +127,7 @@ export function CheckInCard() {
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                 >
-                  {isSubmitting ? "Submitting..." : "Check In"}
+                  {isSubmitting ? "جاري..." : "Check In ✨"}
                 </motion.button>
               </motion.div>
             )}
@@ -140,9 +141,9 @@ export function CheckInCard() {
           <div className="flex items-center gap-2">
             <span className="text-2xl">{getMoodEmoji(myCheckIn.mood)}</span>
             <div>
-              <p className="text-xs text-sky">Your mood</p>
+              <p className="text-xs text-sky">مزاجك</p>
               {myCheckIn.note && (
-                <p className="text-sm text-foreground">{myCheckIn.note}</p>
+                <p className="text-sm text-foreground" dir="rtl">{myCheckIn.note}</p>
               )}
             </div>
           </div>
@@ -165,17 +166,17 @@ export function CheckInCard() {
             <span className="text-2xl">{getMoodEmoji(partnerCheckIn.mood)}</span>
             <div className="flex-1">
               <p className="text-xs text-rose">
-                {partner?.name} • today
+                {partner?.name} • النهارده
               </p>
               {partnerCheckIn.note && (
-                <p className="text-sm text-foreground">{partnerCheckIn.note}</p>
+                <p className="text-sm text-foreground" dir="rtl">{partnerCheckIn.note}</p>
               )}
             </div>
           </div>
         </motion.div>
       ) : (
         <p className="text-sm text-foreground-muted text-center">
-          {partner?.name} hasn&apos;t checked in yet
+          {partner?.name} لسه ما عملش check-in
         </p>
       )}
     </motion.div>

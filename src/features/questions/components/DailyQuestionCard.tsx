@@ -107,8 +107,9 @@ export function DailyQuestionCard() {
             type="text"
             value={textAnswer}
             onChange={(e) => setTextAnswer(e.target.value.slice(0, questionType === "one_word" ? 20 : 50))}
-            placeholder={questionType === "one_word" ? "One word..." : "Your answer..."}
-            className="flex-1 py-3 px-4 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors"
+            placeholder={questionType === "one_word" ? "كلمة واحدة..." : "إجابتك..."}
+            className="flex-1 py-3 px-4 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors text-right"
+            dir="rtl"
             onKeyDown={(e) => e.key === "Enter" && handleTextSubmit()}
           />
           <motion.button
@@ -118,7 +119,7 @@ export function DailyQuestionCard() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            Send
+            ابعت
           </motion.button>
         </div>
       )}
@@ -126,8 +127,8 @@ export function DailyQuestionCard() {
       {/* My answer - shown after answering */}
       {hasAnswered && myResponse && (
         <div className="p-3 rounded-xl bg-sky/10 border border-sky/30">
-          <p className="text-xs text-sky mb-1">Your answer</p>
-          <p className="text-foreground font-medium">{myResponse.answer}</p>
+          <p className="text-xs text-sky mb-1">إجابتك</p>
+          <p className="text-foreground font-medium" dir="rtl">{myResponse.answer}</p>
         </div>
       )}
 
@@ -142,7 +143,7 @@ export function DailyQuestionCard() {
             className="flex items-center gap-2 text-sm text-foreground-muted"
           >
             <span className="text-lg">🔒</span>
-            <span>{partner?.name}&apos;s answer unlocks after yours</span>
+            <span>إجابة {partner?.name} هتظهر بعد ما تجاوب</span>
           </motion.div>
         )}
 
@@ -155,7 +156,7 @@ export function DailyQuestionCard() {
             className="flex items-center gap-2 text-sm text-foreground-muted"
           >
             <span className="text-lg">⏳</span>
-            <span>Waiting for {partner?.name} to answer...</span>
+            <span>مستني {partner?.name} يجاوب...</span>
           </motion.div>
         )}
 
@@ -167,8 +168,8 @@ export function DailyQuestionCard() {
             exit={{ opacity: 0 }}
             className="p-3 rounded-xl bg-rose/10 border border-rose/30"
           >
-            <p className="text-xs text-rose mb-1">{partner?.name}&apos;s answer</p>
-            <p className="text-foreground font-medium">{partnerResponse.answer}</p>
+            <p className="text-xs text-rose mb-1">إجابة {partner?.name}</p>
+            <p className="text-foreground font-medium" dir="rtl">{partnerResponse.answer}</p>
           </motion.div>
         )}
       </AnimatePresence>

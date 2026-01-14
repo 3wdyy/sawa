@@ -15,9 +15,10 @@ const MOOD_OPTIONS: { mood: MoodType; emoji: string }[] = [
 ];
 
 const VIBE_OPTIONS = [
-  { vibe: "Miss you 💕", label: "Miss you", emoji: "💕" },
-  { vibe: "Love you ❤️", label: "Love you", emoji: "❤️" },
-  { vibe: "Thinking of you 💭", label: "Thinking of you", emoji: "💭" },
+  { vibe: "وحشتني 💕", label: "وحشتني", emoji: "💕" },
+  { vibe: "بحبك ❤️", label: "بحبك", emoji: "❤️" },
+  { vibe: "بفكر فيك 💭", label: "بفكر فيك", emoji: "💭" },
+  { vibe: "مشتاق/ة 🥺", label: "مشتاق/ة", emoji: "🥺" },
 ];
 
 const ENERGY_LEVELS = [1, 2, 3, 4, 5];
@@ -86,7 +87,7 @@ export function QuickRitualCard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-lavender flex items-center gap-2">
-          <span>✨</span> Quick Ritual
+          <span>✨</span> Ritual سريع
         </span>
         {hasCompleted && (
           <span className="text-xs px-2 py-0.5 rounded-full bg-mint/20 text-mint">
@@ -108,7 +109,7 @@ export function QuickRitualCard() {
               className="space-y-3"
             >
               <p className="text-sm text-foreground-muted">
-                <span className="text-lavender font-medium">1/3</span> How&apos;s your mood right now?
+                <span className="text-lavender font-medium">1/3</span> مزاجك دلوقتي إيه؟
               </p>
               <div className="flex gap-2">
                 {MOOD_OPTIONS.map(({ mood, emoji }) => (
@@ -138,13 +139,13 @@ export function QuickRitualCard() {
             >
               <div className="flex items-center justify-between">
                 <p className="text-sm text-foreground-muted">
-                  <span className="text-lavender font-medium">2/3</span> Energy level?
+                  <span className="text-lavender font-medium">2/3</span> معدل طاقتك؟
                 </p>
                 <button
                   onClick={() => setStep(1)}
                   className="text-xs text-foreground-muted hover:text-foreground"
                 >
-                  ← Back
+                  ← رجوع
                 </button>
               </div>
               <div className="flex gap-2">
@@ -178,13 +179,13 @@ export function QuickRitualCard() {
             >
               <div className="flex items-center justify-between">
                 <p className="text-sm text-foreground-muted">
-                  <span className="text-lavender font-medium">3/3</span> Send a vibe to {partner?.name}:
+                  <span className="text-lavender font-medium">3/3</span> ابعت vibe لـ {partner?.name}:
                 </p>
                 <button
                   onClick={() => setStep(2)}
                   className="text-xs text-foreground-muted hover:text-foreground"
                 >
-                  ← Back
+                  ← رجوع
                 </button>
               </div>
 
@@ -209,7 +210,7 @@ export function QuickRitualCard() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    ✏️ Custom...
+                    ✏️ حاجة تانية...
                   </motion.button>
                 </div>
               ) : (
@@ -218,8 +219,9 @@ export function QuickRitualCard() {
                     type="text"
                     value={customVibe}
                     onChange={(e) => setCustomVibe(e.target.value.slice(0, 50))}
-                    placeholder="Your custom vibe..."
-                    className="flex-1 py-3 px-4 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors text-sm"
+                    placeholder="اكتب الـ vibe بتاعك..."
+                    className="flex-1 py-3 px-4 rounded-xl bg-background-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-lavender transition-colors text-sm text-right"
+                    dir="rtl"
                     autoFocus
                     onKeyDown={(e) => e.key === "Enter" && handleCustomVibeSubmit()}
                   />
@@ -229,7 +231,7 @@ export function QuickRitualCard() {
                     className="py-3 px-4 rounded-xl bg-rose text-white font-medium disabled:opacity-50"
                     whileTap={{ scale: 0.98 }}
                   >
-                    Send
+                    ابعت
                   </motion.button>
                 </div>
               )}
@@ -241,13 +243,13 @@ export function QuickRitualCard() {
       {/* Completed - show summary */}
       {hasCompleted && myRitual && (
         <div className="p-3 rounded-xl bg-sky/10 border border-sky/30">
-          <p className="text-xs text-sky mb-2">Your ritual</p>
+          <p className="text-xs text-sky mb-2">الـ ritual بتاعك</p>
           <div className="flex items-center gap-4 text-sm">
             <span title="Mood">{getMoodEmoji(myRitual.mood)}</span>
             <span title="Energy" className="text-foreground-muted">
               🔋 {myRitual.energy}/5
             </span>
-            <span className="text-foreground">{myRitual.vibe}</span>
+            <span className="text-foreground" dir="rtl">{myRitual.vibe}</span>
           </div>
         </div>
       )}
@@ -264,18 +266,18 @@ export function QuickRitualCard() {
           animate={{ opacity: 1 }}
           className="p-3 rounded-xl bg-rose/10 border border-rose/30"
         >
-          <p className="text-xs text-rose mb-2">{partner?.name}&apos;s ritual</p>
+          <p className="text-xs text-rose mb-2">الـ ritual بتاع {partner?.name}</p>
           <div className="flex items-center gap-4 text-sm">
             <span title="Mood">{getMoodEmoji(partnerRitual.mood)}</span>
             <span title="Energy" className="text-foreground-muted">
               🔋 {partnerRitual.energy}/5
             </span>
-            <span className="text-foreground">{partnerRitual.vibe}</span>
+            <span className="text-foreground" dir="rtl">{partnerRitual.vibe}</span>
           </div>
         </motion.div>
       ) : (
         <p className="text-sm text-foreground-muted text-center">
-          {partner?.name} hasn&apos;t completed the ritual yet
+          {partner?.name} لسه ما عملش ritual
         </p>
       )}
     </motion.div>

@@ -81,12 +81,23 @@ export function useWishes() {
   // Fulfill wish mutation
   const fulfillMutation = useMutation({
     mutationFn: async (wishId: string) => {
+      if (!user) throw new Error("No user");
       const wish = await fulfillWish(wishId);
+      if (wish) {
+        await logActivity(
+          user.id,
+          "wish_added", // Using wish_added type for fulfilled wishes too
+          `تحققت أمنية: ${wish.title} ✨`,
+          "wish",
+          wishId
+        );
+      }
       return wish;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: myQueryKey });
       queryClient.invalidateQueries({ queryKey: partnerQueryKey });
+      queryClient.invalidateQueries({ queryKey: ["activity-feed"] });
     },
   });
 

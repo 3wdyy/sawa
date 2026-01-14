@@ -3,8 +3,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchUserHabits, logHabit, removeHabitLog } from "../api/habits";
 import { addCoupleXp } from "@/features/couple/api/couple";
+import { logActivity } from "@/features/activity/api/activity";
 import { useAuth } from "@/features/auth/context";
-import { getTodayInTimezone } from "@/lib/utils/date";
+import { getSawaDay } from "@/lib/utils/date";
 import type { Habit, HabitLog, UserHabit } from "@/types/database";
 
 // XP values for different habit types
@@ -23,7 +24,8 @@ export function useHabits() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const today = user ? getTodayInTimezone(user.timezone) : "";
+  // Use Fajr-based day (day resets at Fajr, not midnight)
+  const today = user ? getSawaDay(user.timezone) : "";
   const queryKey = ["habits", user?.id, today];
 
   // Fetch user's habits
@@ -72,13 +74,26 @@ export function useHabits() {
 
       return { previousHabits };
     },
-    onSuccess: async (_data, { habitType }) => {
+    onSuccess: async (_data, { habitId, habitType }) => {
       // Award XP for completing the habit
       const xpAmount = XP_VALUES[habitType] || 10;
       try {
         await addCoupleXp(xpAmount);
         // Invalidate couple progress to show updated XP
         queryClient.invalidateQueries({ queryKey: ["couple-progress"] });
+        // Log activity
+        const userHabit = habits?.find((h) => h.habit_id === habitId);
+        const activityType = habitType === "prayer" ? "prayer_complete" : "habit_complete";
+        const habitName = userHabit?.habit.name || "habit";
+        await logActivity(
+          user!.id,
+          activityType,
+          `خلّص ${habitName}`,
+          "habit",
+          habitId,
+          xpAmount
+        );
+        queryClient.invalidateQueries({ queryKey: ["activity-feed"] });
       } catch (error) {
         console.error("Failed to add XP:", error);
       }

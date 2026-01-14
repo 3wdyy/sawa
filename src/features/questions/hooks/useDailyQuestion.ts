@@ -10,13 +10,11 @@ import {
   submitQuestionResponse,
   shuffleQuestion,
 } from "../api/questions";
+import { logActivity } from "@/features/activity/api/activity";
+import { getSawaDay } from "@/lib/utils/date";
 import type { DailyQuestion } from "@/types/database";
 
 const XP_FOR_QUESTION = 25;
-
-function getToday(): string {
-  return new Date().toISOString().split("T")[0];
-}
 
 /**
  * Hook for managing daily question interactions
@@ -25,7 +23,8 @@ export function useDailyQuestion() {
   const { user, partner } = useAuth();
   const queryClient = useQueryClient();
   const { addXp } = useCoupleProgress();
-  const today = getToday();
+  // Use Fajr-based day (day resets at Fajr, not midnight)
+  const today = user ? getSawaDay(user.timezone) : new Date().toISOString().split("T")[0];
 
   const questionKey = ["daily-question", today];
   const myResponseKey = ["question-response", user?.id, today];
@@ -64,18 +63,30 @@ export function useDailyQuestion() {
   const answerMutation = useMutation({
     mutationFn: async (answer: string) => {
       if (!user || !question) throw new Error("Missing user or question");
-      return submitQuestionResponse({
+      const response = await submitQuestionResponse({
         user_id: user.id,
         question_id: question.id,
         date: today,
         answer,
       });
+      if (response) {
+        await logActivity(
+          user.id,
+          "question_answered",
+          `جاوب على سؤال اليوم`,
+          "question",
+          question.id,
+          XP_FOR_QUESTION
+        );
+      }
+      return response;
     },
     onSuccess: () => {
       // Award XP
       addXp(XP_FOR_QUESTION);
       // Invalidate queries
       queryClient.invalidateQueries({ queryKey: myResponseKey });
+      queryClient.invalidateQueries({ queryKey: ["activity-feed"] });
     },
   });
 
@@ -95,9 +106,13 @@ export function useDailyQuestion() {
   // Parse options from question
   const options = question?.options as string[] | null;
 
-  // Can see partner's answer only if I've answered
-  const hasAnswered = !!myResponse;
-  const partnerHasAnswered = !!partnerResponse;
+  // Verify response matches current question (handles sync issues between devices)
+  const myResponseValid = myResponse && question && myResponse.question_id === question.id;
+  const partnerResponseValid = partnerResponse && question && partnerResponse.question_id === question.id;
+
+  // Can see partner's answer only if I've answered THIS question
+  const hasAnswered = !!myResponseValid;
+  const partnerHasAnswered = !!partnerResponseValid;
   const canSeePartnerAnswer = hasAnswered && partnerHasAnswered;
   const shufflesUsed = myResponse?.shuffles_used || 0;
   const canShuffle = !hasAnswered && shufflesUsed < 1;
@@ -105,7 +120,7 @@ export function useDailyQuestion() {
   return {
     question,
     options,
-    myResponse,
+    myResponse: myResponseValid ? myResponse : null,
     partnerResponse: canSeePartnerAnswer ? partnerResponse : null,
     hasAnswered,
     partnerHasAnswered,

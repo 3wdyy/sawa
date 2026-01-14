@@ -8,11 +8,10 @@ import {
   getQuestProgressForDate,
   completeQuest,
 } from "../api/quests";
+import { logActivity } from "@/features/activity/api/activity";
+import { useAuth } from "@/features/auth/context";
+import { getSawaDay } from "@/lib/utils/date";
 import type { Quest, QuestProgress } from "@/types/database";
-
-function getToday(): string {
-  return new Date().toISOString().split("T")[0];
-}
 
 export interface QuestWithProgress extends Quest {
   progress: QuestProgress | null;
@@ -23,9 +22,11 @@ export interface QuestWithProgress extends Quest {
  * Hook for daily/weekly quests - challenges with variable XP rewards
  */
 export function useQuests() {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const { addXp } = useCoupleProgress();
-  const today = getToday();
+  // Use Fajr-based day (day resets at Fajr, not midnight)
+  const today = user ? getSawaDay(user.timezone) : new Date().toISOString().split("T")[0];
 
   const questsKey = useMemo(() => ["quests", "daily"], []);
   const progressKey = useMemo(() => ["quest-progress", today], [today]);
@@ -59,10 +60,20 @@ export function useQuests() {
   // Complete quest mutation
   const completeMutation = useMutation({
     mutationFn: async (quest: Quest) => {
+      if (!user) throw new Error("No user");
       const result = await completeQuest(quest.id, today);
       if (result) {
         // Award XP for completing quest
         await addXp(quest.xp_reward);
+        // Log activity
+        await logActivity(
+          user.id,
+          "quest_complete",
+          `أنجز quest: ${quest.title} 🏆`,
+          "quest",
+          quest.id,
+          quest.xp_reward
+        );
       }
       return result;
     },

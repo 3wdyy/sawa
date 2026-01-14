@@ -2,6 +2,77 @@
 
 ---
 
+## Session 10 (V2.1) - January 15, 2026 (Late Night)
+
+**Focus:** Bug Fixes, Fajr Day Reset, Arabic Content, Visual Polish
+
+### Phase 1: Bug Fixes
+- [x] Fixed daily question sync - now validates `question_id` matches before showing answer
+- [x] Fixed activity feed not updating - added `logActivity()` to all hooks:
+  - `useHabits` - logs habit/prayer completions
+  - `useDailyQuestion` - logs question answers
+  - `useCheckIn` - logs check-ins
+  - `useRitual` - logs ritual completions
+  - `useQuests` - logs quest completions
+- [x] Fixed wish fulfill - added activity logging, RTL support
+- [x] Quest tracking improvements
+
+### Phase 2: Fajr-Based Day Reset
+- [x] Created `getSawaDay()` function in `/lib/utils/date.ts`
+  - Day resets at Fajr prayer time, not midnight
+  - Before Fajr = still "yesterday's" Islamic day
+  - Default times: Dubai 5:30 AM, Cairo 5:00 AM
+- [x] Updated ALL hooks to use Fajr-based day:
+  - `useDailyQuestion`, `useCheckIn`, `useRitual`, `useQuests`, `useHabits`, `useDailyQuote`
+
+### Phase 3: Arabic Content
+- [x] Created migration `003_arabic_content.sql`:
+  - 40+ Arabic quotes (Quran, Hadith, Poetry)
+  - 40+ Egyptian Arabic questions
+  - Arabic quest titles
+- [x] Updated `CheckInCard` - Arabic mood labels:
+  - "مبسوط", "عادي", "زعلان", "متضايق", "تعبان", "فرحان"
+  - Header: "عامل/ة إيه؟"
+- [x] Updated `QuickRitualCard` - Arabic vibes:
+  - "وحشتني 💕", "بحبك ❤️", "بفكر فيك 💭", "مشتاق/ة 🥺"
+- [x] RTL support for all text inputs:
+  - Inbox, Wishes, Questions, Check-in, Ritual
+  - Using `dir="rtl"` and `text-right` classes
+
+### Phase 4: Visual Polish
+- [x] Added celebration animations to `globals.css`:
+  - `animate-confetti` - burst animation
+  - `animate-xp-pop` - XP gain popup
+  - `animate-bounce-in` - element entrance
+  - `animate-pulse-glow` - subtle pulsing
+  - `animate-rainbow` - rainbow shimmer text
+  - `animate-float` - floating emojis
+- [x] Added utility classes:
+  - `.btn-glow`, `.card-interactive`
+  - `.bg-gradient-vibrant`, `.bg-gradient-love`, `.bg-gradient-success`
+- [x] Moved quests section to end of dashboard
+
+### Architecture Notes
+- **Day Reset:** Fajr-based via `getSawaDay(timezone)`
+- **Language Strategy:**
+  - Arabic: Questions, moods, vibes, quotes, user content
+  - English: XP, Level, dates, names, buttons
+- **Activity Logging:** All interactions now log to activity_log table
+
+### Files Modified
+- `src/lib/utils/date.ts` - Added `getSawaDay()`, `getSawaDaySimple()`
+- `src/features/*/hooks/*.ts` - Added activity logging, Fajr day reset
+- `src/features/*/components/*.tsx` - Arabic content, RTL support
+- `src/app/globals.css` - Celebration animations
+- `src/app/page.tsx` - Moved quests to end
+- `supabase/migrations/003_arabic_content.sql` - New migration
+
+### Deploy Notes
+- Migration `003_arabic_content.sql` needs to be run on Supabase
+- This will DELETE existing quotes/questions and replace with Arabic
+
+---
+
 ## Session 9 (V2 Session 5) - January 15, 2026 (Late Night)
 
 **Focus:** Visual Polish - Wish List, Daily Quotes, Card Styling, Final Ship
