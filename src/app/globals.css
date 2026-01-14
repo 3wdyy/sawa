@@ -164,3 +164,98 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Base card styling */
+.card {
+  background: var(--background-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+}
+
+/* Card with subtle glow effect */
+.card-glow {
+  box-shadow:
+    0 0 20px rgba(167, 139, 250, 0.05),
+    0 0 40px rgba(167, 139, 250, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.card-glow:hover {
+  box-shadow:
+    0 0 25px rgba(167, 139, 250, 0.08),
+    0 0 50px rgba(167, 139, 250, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Colored card variants */
+.card-sky {
+  border-color: var(--sky-glow);
+  box-shadow:
+    0 0 20px var(--sky-glow),
+    inset 0 1px 0 rgba(56, 189, 248, 0.1);
+}
+
+.card-rose {
+  border-color: var(--rose-glow);
+  box-shadow:
+    0 0 20px var(--rose-glow),
+    inset 0 1px 0 rgba(251, 113, 133, 0.1);
+}
+
+.card-mint {
+  border-color: var(--mint-glow);
+  box-shadow:
+    0 0 20px var(--mint-glow),
+    inset 0 1px 0 rgba(110, 231, 183, 0.1);
+}
+
+.card-gold {
+  border-color: var(--gold-glow);
+  box-shadow:
+    0 0 20px var(--gold-glow),
+    inset 0 1px 0 rgba(252, 211, 77, 0.1);
+}
+
+/* Shine animation for XP bar */
+@keyframes shine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shine-effect {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+  background-size: 50% 100%;
+  animation: shine 2s ease-in-out infinite;
+}
+
+/* Touch-friendly tap targets */
+@media (pointer: coarse) {
+  .tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

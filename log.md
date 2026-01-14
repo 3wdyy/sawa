@@ -2,6 +2,76 @@
 
 ---
 
+## Session 9 (V2 Session 5) - January 15, 2026 (Late Night)
+
+**Focus:** Visual Polish - Wish List, Daily Quotes, Card Styling, Final Ship
+
+### Did
+- [x] Committed Session 4 work (was uncommitted)
+- [x] Created `useWishes` hook:
+  - Fetches my wishes and partner's wishes
+  - Separates fulfilled from unfulfilled
+  - Add, fulfill, and delete mutations
+  - Awards +XP on wish added via activity log
+- [x] Created `WishListCard` component:
+  - Two tabs: "My Wishes" and "Partner's Wishes" (gift ideas!)
+  - Add new wish form
+  - Fulfill button (checkmark) moves to archive
+  - Delete button for own wishes
+  - Collapsible archive section showing fulfilled wishes
+  - Color-coded by user (sky/rose)
+- [x] Created `useDailyQuote` hook:
+  - Fetches today's quote from DB (auto-assigns random if none)
+  - Stale time of 1 hour for caching
+- [x] Created `DailyQuoteCard` component:
+  - Gradient background with decorative quotation marks
+  - Quote text with source attribution
+  - Smooth entrance animations
+  - Positioned below progress bar on dashboard
+- [x] Enhanced CSS with card styling:
+  - `.card` base class with background and border
+  - `.card-glow` with subtle lavender glow effect
+  - Color variants: `.card-sky`, `.card-rose`, `.card-mint`, `.card-gold`
+  - `.shine-effect` keyframe animation for XP bar
+  - Mobile touch target utilities
+  - Hide scrollbar utility
+- [x] Wired all components to dashboard with proper animation delays
+- [x] Build & lint pass
+
+### Files Created
+- `src/features/wishes/hooks/useWishes.ts`
+- `src/features/wishes/components/WishListCard.tsx`
+- `src/features/quotes/hooks/useDailyQuote.ts`
+- `src/features/quotes/components/DailyQuoteCard.tsx`
+
+### Files Modified
+- `src/app/page.tsx` - Added DailyQuoteCard and WishListCard
+- `src/app/globals.css` - Added card styling, glow effects, animations
+
+### Architecture Notes
+- **Wishes:** My wishes (can add/fulfill/delete) + Partner's wishes (read-only, for gift ideas)
+- **Quotes:** One per day, auto-assigned from 40+ seeded quotes
+- **Card Glow:** Subtle lavender glow on hover, color variants for user identity
+
+### V2 Complete Feature Set
+1. ✅ XP & Level System (Session 2)
+2. ✅ Daily Question, Check-In, Quick Ritual (Session 3)
+3. ✅ Reactions, Activity Feed, Shared Inbox, Quests (Session 4)
+4. ✅ Wish List, Daily Quotes, Visual Polish (Session 5)
+
+### Ship Status
+**SAWA V2 IS COMPLETE!** 🎉
+
+All features from V2_PLAN.md are implemented:
+- Gamification (XP, levels, quests)
+- Connection features (question, check-in, ritual)
+- Social layer (reactions, activity feed)
+- Shared spaces (inbox, wish list)
+- Content (daily quotes)
+- Visual polish (glow effects, consistent styling)
+
+---
+
 ## Session 8 (V2 Session 4) - January 14, 2026 (Late Night)
 
 **Focus:** Social Layer - Reactions, Activity Feed, Shared Inbox, Quests

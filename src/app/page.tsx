@@ -14,6 +14,8 @@ import { QuickRitualCard } from "@/features/ritual/components/QuickRitualCard";
 import { ActivityFeedCard } from "@/features/activity/components/ActivityFeedCard";
 import { SharedInboxCard } from "@/features/inbox/components/SharedInboxCard";
 import { QuestsCard } from "@/features/quests/components/QuestsCard";
+import { DailyQuoteCard } from "@/features/quotes/components/DailyQuoteCard";
+import { WishListCard } from "@/features/wishes/components/WishListCard";
 import { useHabits } from "@/features/habits/hooks/useHabits";
 import { usePartnerHabits } from "@/features/habits/hooks/usePartnerHabits";
 import { usePrayerTimes } from "@/features/prayer/hooks/usePrayerTimes";
@@ -212,6 +214,15 @@ export default function Home() {
           <CoupleProgressBar />
         </motion.section>
 
+        {/* Daily Quote */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.06 }}
+        >
+          <DailyQuoteCard />
+        </motion.section>
+
         {/* Connection section */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
@@ -255,11 +266,20 @@ export default function Home() {
           <SharedInboxCard />
         </motion.section>
 
+        {/* Wish List section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <WishListCard />
+        </motion.section>
+
         {/* Prayer section */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.16 }}
+          transition={{ delay: 0.17 }}
         >
           <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
             <span>🕌</span> Prayers
@@ -297,7 +317,7 @@ export default function Home() {
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.18 }}
+            transition={{ delay: 0.19 }}
           >
             <h2 className="text-sm font-medium text-foreground-muted mb-3 flex items-center gap-2">
               <span>💕</span> Together
